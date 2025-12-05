@@ -5,298 +5,199 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>管理员中心 - 就业管理系统</title>
   <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-  <style>
-    .dashboard-container {
-      display: flex;
-      min-height: calc(100vh - 60px);
-    }
-    
-    .sidebar {
-      width: 250px;
-      background-color: #2c3e50;
-      color: white;
-      padding: 20px 0;
-    }
-    
-    .sidebar-header {
-      padding: 0 20px 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-    
-    .sidebar-menu {
-      padding: 10px 0;
-    }
-    
-    .menu-item {
-      padding: 12px 20px;
-      display: flex;
-      align-items: center;
-      color: #ecf0f1;
-      text-decoration: none;
-      transition: all 0.3s;
-    }
-    
-    .menu-item:hover, .menu-item.active {
-      background-color: #34495e;
-      color: #3498db;
-    }
-    
-    .menu-item i {
-      margin-right: 10px;
-      font-size: 1.2em;
-    }
-    
-    .main-content {
-      flex: 1;
-      padding: 20px;
-      background-color: #f5f6fa;
-      overflow-y: auto;
-    }
-    
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 30px;
-    }
-    
-    .stats-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-    
-    .stat-card {
-      background: white;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
-    
-    .stat-card h3 {
-      color: #7f8c8d;
-      font-size: 0.9em;
-      margin: 0 0 10px 0;
-    }
-    
-    .stat-card .value {
-      font-size: 1.8em;
-      font-weight: bold;
-      color: #2c3e50;
-    }
-    
-    .recent-activities {
-      background: white;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      margin-bottom: 20px;
-    }
-    
-    .activity-item {
-      padding: 15px 0;
-      border-bottom: 1px solid #eee;
-      display: flex;
-      align-items: center;
-    }
-    
-    .activity-item:last-child {
-      border-bottom: none;
-    }
-    
-    .activity-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background-color: #e1f5fe;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 15px;
-      color: #0288d1;
-    }
-    
-    .activity-content {
-      flex: 1;
-    }
-    
-    .activity-time {
-      color: #95a5a6;
-      font-size: 0.85em;
-    }
-    
-    .pending-approvals {
-      background: white;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
-    
-    .approval-item {
-      padding: 15px 0;
-      border-bottom: 1px solid #eee;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    
-    .approval-actions button {
-      margin-left: 10px;
-    }
-  </style>
+  <link rel="stylesheet" href="../css/icons.css">
+  <link rel="stylesheet" href="../css/admin.css">
 </head>
 <body>
   <nav class="navbar">
     <div class="container">
-      <a href="../index.html" class="navbar-brand">就业管理系统</a>
+      <a href="../index.html" class="navbar-brand">就业管理系统 - 管理员</a>
       <div class="navbar-menu">
-        <span id="adminName" style="margin-right: 15px;"></span>
+        <span id="adminName"></span>
         <a href="#" id="logoutBtn">退出登录</a>
       </div>
     </div>
   </nav>
 
   <div class="dashboard-container">
-    <!-- 侧边栏 -->
     <div class="sidebar">
       <div class="sidebar-header">
-        <h2>管理员中心</h2>
+        <h2>管理中心</h2>
       </div>
       <div class="sidebar-menu">
-        <a href="#" class="menu-item active" data-page="dashboard">
-          <i class="bi bi-speedometer2"></i> 控制台
+        <a href="dashboard.html" class="menu-item active">
+          <span class="icon icon-dashboard"></span> 控制台
         </a>
-        <a href="#" class="menu-item" data-page="users">
-          <i class="bi bi-people"></i> 用户管理
+        <a href="users.html" class="menu-item">
+          <span class="icon icon-users"></span> 用户管理
         </a>
-        <a href="#" class="menu-item" data-page="companies">
-          <i class="bi bi-building"></i> 企业管理
+        <a href="companies.html" class="menu-item">
+          <span class="icon icon-building"></span> 企业管理
         </a>
-        <a href="#" class="menu-item" data-page="jobs">
-          <i class="bi bi-briefcase"></i> 职位管理
+        <a href="jobs.html" class="menu-item">
+          <span class="icon icon-briefcase"></span> 职位审核
         </a>
-        <a href="#" class="menu-item" data-page="applications">
-          <i class="bi bi-file-earmark-text"></i> 申请管理
+        <a href="statistics.html" class="menu-item">
+          <span class="icon icon-dashboard"></span> 数据统计
         </a>
-        <a href="#" class="menu-item" data-page="reports">
-          <i class="bi bi-graph-up"></i> 数据统计
-        </a>
-        <a href="#" class="menu-item" data-page="settings">
-          <i class="bi bi-gear"></i> 系统设置
+        <a href="system.html" class="menu-item">
+          <span class="icon icon-settings"></span> 系统设置
         </a>
       </div>
     </div>
 
-    <!-- 主内容区 -->
     <div class="main-content">
-      <div class="header">
+      <div class="page-header">
         <h1>管理员控制台</h1>
-        <div class="actions">
-          <button class="btn btn-primary" id="addAdminBtn">
-            <i class="bi bi-person-plus"></i> 添加管理员
-          </button>
-        </div>
       </div>
 
       <!-- 数据统计 -->
       <div class="stats-cards">
-        <div class="stat-card">
-          <h3>总用户数</h3>
-          <div class="value" id="totalUsers">0</div>
+        <div class="stat-card green">
+          <h3>注册学生</h3>
+          <div class="value" id="studentCount">0</div>
+          <div class="trend">
+            <span class="icon">↗</span> +12% 本周
+          </div>
+          <div class="icon-wrapper">
+            <span class="icon icon-education"></span>
+          </div>
         </div>
-        <div class="stat-card">
-          <h3>企业用户</h3>
-          <div class="value" id="totalCompanies">0</div>
-        </div>
-        <div class="stat-card">
-          <h3>活跃职位</h3>
-          <div class="value" id="activeJobs">0</div>
-        </div>
-        <div class="stat-card">
-          <h3>待审核</h3>
-          <div class="value" id="pendingApprovals">0</div>
-        </div>
-      </div>
 
-      <!-- 最近活动 -->
-      <div class="recent-activities">
-        <h2>系统动态</h2>
-        <div id="systemActivities">
-          <!-- 动态内容将通过JavaScript动态生成 -->
-          <div class="activity-item">
-            <div class="activity-icon">
-              <i class="bi bi-bell"></i>
-            </div>
-            <div class="activity-content">
-              <div>欢迎使用管理员控制台</div>
-              <div class="activity-time">刚刚</div>
-            </div>
+        <div class="stat-card blue">
+          <h3>入驻企业</h3>
+          <div class="value" id="companyCount">0</div>
+          <div class="trend">
+            <span class="icon">↗</span> +8% 本周
+          </div>
+          <div class="icon-wrapper">
+            <span class="icon icon-building"></span>
+          </div>
+        </div>
+
+        <div class="stat-card orange">
+          <h3>发布职位</h3>
+          <div class="value" id="jobCount">0</div>
+          <div class="trend">
+            <span class="icon">↗</span> +15% 本周
+          </div>
+          <div class="icon-wrapper">
+            <span class="icon icon-briefcase"></span>
+          </div>
+        </div>
+
+        <div class="stat-card purple">
+          <h3>就业率</h3>
+          <div class="value" id="employmentRate">0%</div>
+          <div class="trend">
+            <span class="icon">↗</span> +3% 本月
+          </div>
+          <div class="icon-wrapper">
+            <span class="icon icon-star"></span>
           </div>
         </div>
       </div>
 
-      <!-- 待审核项 -->
-      <div class="pending-approvals">
-        <h2>待审核项</h2>
-        <div id="pendingItems">
-          <!-- 待审核项将通过JavaScript动态生成 -->
-          <div class="approval-item">
-            <div class="approval-content">
-              <strong>企业认证申请</strong> - 示例科技有限公司
+      <!-- 快速操作 -->
+      <div class="content-card">
+        <h2><span class="icon icon-tools"></span> 快速操作</h2>
+        <div class="quick-actions">
+          <div class="quick-action-card" onclick="location.href='users.html'">
+            <div class="icon icon-users icon-2x"></div>
+            <div class="label">用户管理</div>
+          </div>
+          <div class="quick-action-card" onclick="location.href='companies.html'">
+            <div class="icon icon-building icon-2x"></div>
+            <div class="label">企业审核</div>
+          </div>
+          <div class="quick-action-card" onclick="location.href='jobs.html'">
+            <div class="icon icon-briefcase icon-2x"></div>
+            <div class="label">职位审核</div>
+          </div>
+          <div class="quick-action-card" onclick="location.href='statistics.html'">
+            <div class="icon icon-dashboard icon-2x"></div>
+            <div class="label">数据报表</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 待处理事项 -->
+      <div class="content-card">
+        <h2><span class="icon icon-bell"></span> 待处理事项</h2>
+        <div class="approval-list" id="pendingApprovals">
+          <div class="approval-card">
+            <div class="approval-header">
+              <div class="approval-title">企业认证待审核</div>
+              <span class="status-badge pending">待处理</span>
+            </div>
+            <div class="approval-meta">
+              阿里巴巴集团 · 5分钟前提交
             </div>
             <div class="approval-actions">
-              <button class="btn btn-sm btn-success">通过</button>
-              <button class="btn btn-sm btn-danger">拒绝</button>
-              <button class="btn btn-sm btn-outline-secondary">查看</button>
+              <button class="btn btn-sm btn-success">
+                <span class="icon icon-check"></span> 通过
+              </button>
+              <button class="btn btn-sm btn-danger">
+                <span class="icon icon-close"></span> 拒绝
+              </button>
+              <button class="btn btn-sm btn-outline-secondary">
+                <span class="icon icon-eye"></span> 查看详情
+              </button>
+            </div>
+          </div>
+
+          <div class="approval-card">
+            <div class="approval-header">
+              <div class="approval-title">职位发布待审核</div>
+              <span class="status-badge pending">待处理</span>
+            </div>
+            <div class="approval-meta">
+              腾讯科技 - Java开发工程师 · 1小时前提交
+            </div>
+            <div class="approval-actions">
+              <button class="btn btn-sm btn-success">
+                <span class="icon icon-check"></span> 通过
+              </button>
+              <button class="btn btn-sm btn-danger">
+                <span class="icon icon-close"></span> 拒绝
+              </button>
+              <button class="btn btn-sm btn-outline-secondary">
+                <span class="icon icon-eye"></span> 查看详情
+              </button>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- 添加管理员模态框 -->
-  <div class="modal" id="addAdminModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>添加管理员</h3>
-        <span class="close">&times;</span>
-      </div>
-      <div class="modal-body">
-        <form id="addAdminForm">
-          <div class="form-group">
-            <label>用户名</label>
-            <input type="text" class="form-control" name="username" required>
+      <!-- 系统活动 -->
+      <div class="content-card">
+        <h2><span class="icon icon-clock"></span> 系统活动</h2>
+        <div class="activity-timeline">
+          <div class="activity-item">
+            <div class="activity-content">
+              <strong>张三</strong> 注册了学生账号
+            </div>
+            <div class="activity-time">5分钟前</div>
           </div>
-          <div class="form-group">
-            <label>密码</label>
-            <input type="password" class="form-control" name="password" required>
+          <div class="activity-item">
+            <div class="activity-content">
+              <strong>腾讯科技</strong> 发布了新职位 "前端开发工程师"
+            </div>
+            <div class="activity-time">15分钟前</div>
           </div>
-          <div class="form-group">
-            <label>确认密码</label>
-            <input type="password" class="form-control" name="confirmPassword" required>
+          <div class="activity-item">
+            <div class="activity-content">
+              <strong>李四</strong> 投递了简历到 "Java开发工程师"
+            </div>
+            <div class="activity-time">1小时前</div>
           </div>
-          <div class="form-group">
-            <label>姓名</label>
-            <input type="text" class="form-control" name="name" required>
+          <div class="activity-item">
+            <div class="activity-content">
+              <strong>阿里巴巴集团</strong> 提交了企业认证申请
+            </div>
+            <div class="activity-time">2小时前</div>
           </div>
-          <div class="form-group">
-            <label>邮箱</label>
-            <input type="email" class="form-control" name="email" required>
-          </div>
-          <div class="form-group">
-            <label>角色</label>
-            <select class="form-control" name="role" required>
-              <option value="admin">管理员</option>
-              <option value="superadmin">超级管理员</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <button type="submit" class="btn btn-primary">添加</button>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
   </div>
@@ -304,9 +205,7 @@
   <script src="../js/api.js"></script>
   <script src="../js/auth.js"></script>
   <script>
-    // 检查登录状态
     document.addEventListener('DOMContentLoaded', async () => {
-      // 检查是否已登录
       const user = getCurrentUser();
       const role = getUserRole();
       if (!user || role !== 'admin') {
@@ -314,110 +213,28 @@
         return;
       }
 
-      // 显示管理员名称
-      document.getElementById('adminName').textContent = user.name || user.username;
-
-      // 加载管理员数据
+      document.getElementById('adminName').textContent = user.name || user.username || '管理员';
       await loadAdminData();
-      
-      // 绑定事件
       bindEvents();
     });
 
-    // 加载管理员数据
     async function loadAdminData() {
       try {
-        // 这里应该调用API获取管理员数据
-        // const data = await adminApi.getDashboardData();
-        // 更新UI
-        // document.getElementById('totalUsers').textContent = data.totalUsers || 0;
-        // document.getElementById('totalCompanies').textContent = data.totalCompanies || 0;
-        // document.getElementById('activeJobs').textContent = data.activeJobs || 0;
-        // document.getElementById('pendingApprovals').textContent = data.pendingApprovals || 0;
+        // 模拟数据加载
+        document.getElementById('studentCount').textContent = '156';
+        document.getElementById('companyCount').textContent = '42';
+        document.getElementById('jobCount').textContent = '238';
+        document.getElementById('employmentRate').textContent = '87.5%';
       } catch (error) {
         console.error('加载数据失败:', error);
-        alert('加载数据失败，请刷新重试');
       }
     }
 
-    // 绑定事件
     function bindEvents() {
-      // 登出
       document.getElementById('logoutBtn').addEventListener('click', (e) => {
         e.preventDefault();
         logout();
         window.location.href = '../login.html?role=admin';
-      });
-
-      // 添加管理员按钮
-      document.getElementById('addAdminBtn').addEventListener('click', () => {
-        document.getElementById('addAdminModal').style.display = 'block';
-      });
-
-      // 关闭模态框
-      document.querySelectorAll('.close').forEach(closeBtn => {
-        closeBtn.addEventListener('click', () => {
-          closeBtn.closest('.modal').style.display = 'none';
-        });
-      });
-
-      // 点击模态框外部关闭
-      window.addEventListener('click', (e) => {
-        if (e.target.classList.contains('modal')) {
-          e.target.style.display = 'none';
-        }
-      });
-
-      // 提交添加管理员表单
-      document.getElementById('addAdminForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        
-        if (formData.get('password') !== formData.get('confirmPassword')) {
-          alert('两次输入的密码不一致');
-          return;
-        }
-
-        const adminData = {
-          username: formData.get('username'),
-          password: formData.get('password'),
-          name: formData.get('name'),
-          email: formData.get('email'),
-          role: formData.get('role')
-        };
-
-        try {
-          // 这里应该调用API添加管理员
-          // const result = await adminApi.addAdmin(adminData);
-          // if (result.code === 200) {
-          //   alert('添加管理员成功');
-          //   document.getElementById('addAdminModal').style.display = 'none';
-          //   e.target.reset();
-          //   await loadAdminData(); // 刷新数据
-          // } else {
-          //   throw new Error(result.message || '添加失败');
-          // }
-          alert('添加管理员功能开发中...');
-        } catch (error) {
-          console.error('添加管理员失败:', error);
-          alert('添加管理员失败: ' + error.message);
-        }
-      });
-
-      // 侧边栏菜单点击
-      document.querySelectorAll('.menu-item').forEach(item => {
-        item.addEventListener('click', (e) => {
-          e.preventDefault();
-          const page = item.getAttribute('data-page');
-          if (page === 'dashboard') return; // 已经在首页
-          
-          // 更新活动菜单项
-          document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-          item.classList.add('active');
-          
-          // 这里可以加载对应页面的内容
-          alert(`加载${page}页面...`);
-        });
       });
     }
   </script>

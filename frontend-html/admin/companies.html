@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>企业管理 - 管理员中心</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/icons.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="../index.html" class="navbar-brand">就业管理系统 - 管理员</a>
+      <div class="navbar-menu">
+        <span id="adminName"></span>
+        <a href="#" id="logoutBtn">退出登录</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="dashboard-container">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h2>管理中心</h2>
+      </div>
+      <div class="sidebar-menu">
+        <a href="dashboard.html" class="menu-item">
+          <span class="icon icon-dashboard"></span> 控制台
+        </a>
+        <a href="users.html" class="menu-item">
+          <span class="icon icon-users"></span> 用户管理
+        </a>
+        <a href="companies.html" class="menu-item active">
+          <span class="icon icon-building"></span> 企业管理
+        </a>
+        <a href="jobs.html" class="menu-item">
+          <span class="icon icon-briefcase"></span> 职位审核
+        </a>
+        <a href="statistics.html" class="menu-item">
+          <span class="icon icon-dashboard"></span> 数据统计
+        </a>
+        <a href="system.html" class="menu-item">
+          <span class="icon icon-settings"></span> 系统设置
+        </a>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h1>企业管理</h1>
+      </div>
+
+      <!-- 统计卡片 -->
+      <div class="stats-cards">
+        <div class="stat-card blue">
+          <h3>入驻企业</h3>
+          <div class="value">42</div>
+          <div class="trend">本月新增 8 家</div>
+        </div>
+        <div class="stat-card orange">
+          <h3>待审核</h3>
+          <div class="value">5</div>
+          <div class="trend">需要处理</div>
+        </div>
+        <div class="stat-card green">
+          <h3>已认证</h3>
+          <div class="value">37</div>
+          <div class="trend">认证完成</div>
+        </div>
+        <div class="stat-card purple">
+          <h3>活跃企业</h3>
+          <div class="value">28</div>
+          <div class="trend">本月活跃</div>
+        </div>
+      </div>
+
+      <!-- 待审核企业 -->
+      <div class="content-card">
+        <h2><span class="icon icon-bell"></span> 待审核企业</h2>
+        <div class="approval-list">
+          <div class="approval-card">
+            <div class="approval-header">
+              <div class="approval-title">阿里巴巴集团</div>
+              <span class="status-badge pending">待审核</span>
+            </div>
+            <div class="approval-meta">
+              统一社会信用代码: 91330000XXXXXXXXXX · 5分钟前提交
+            </div>
+            <div class="approval-actions">
+              <button class="btn btn-sm btn-success" onclick="approveCompany(1)">
+                <span class="icon icon-check"></span> 通过
+              </button>
+              <button class="btn btn-sm btn-danger" onclick="rejectCompany(1)">
+                <span class="icon icon-close"></span> 拒绝
+              </button>
+              <button class="btn btn-sm btn-outline-secondary" onclick="viewCompanyDetail(1)">
+                <span class="icon icon-eye"></span> 查看详情
+              </button>
+            </div>
+          </div>
+
+          <div class="approval-card">
+            <div class="approval-header">
+              <div class="approval-title">腾讯科技有限公司</div>
+              <span class="status-badge pending">待审核</span>
+            </div>
+            <div class="approval-meta">
+              统一社会信用代码: 91440300XXXXXXXXXX · 1小时前提交
+            </div>
+            <div class="approval-actions">
+              <button class="btn btn-sm btn-success" onclick="approveCompany(2)">
+                <span class="icon icon-check"></span> 通过
+              </button>
+              <button class="btn btn-sm btn-danger" onclick="rejectCompany(2)">
+                <span class="icon icon-close"></span> 拒绝
+              </button>
+              <button class="btn btn-sm btn-outline-secondary" onclick="viewCompanyDetail(2)">
+                <span class="icon icon-eye"></span> 查看详情
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 已认证企业 -->
+      <div class="content-card">
+        <h2><span class="icon icon-building"></span> 已认证企业</h2>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>企业名称</th>
+              <th>信用代码</th>
+              <th>联系人</th>
+              <th>联系电话</th>
+              <th>状态</th>
+              <th>认证时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>字节跳动</td>
+              <td>911101085******123</td>
+              <td>张经理</td>
+              <td>010-12345678</td>
+              <td><span class="status-badge active">正常</span></td>
+              <td>2024-11-15</td>
+              <td class="actions">
+                <button class="btn btn-sm btn-outline-primary" onclick="viewCompanyDetail(1)">
+                  <span class="icon icon-eye"></span> 查看
+                </button>
+                <button class="btn btn-sm btn-outline-warning" onclick="suspendCompany(1)">
+                  <span class="icon icon-pause"></span> 暂停
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>华为技术有限公司</td>
+              <td>914403006******456</td>
+              <td>李经理</td>
+              <td>0755-87654321</td>
+              <td><span class="status-badge active">正常</span></td>
+              <td>2024-11-20</td>
+              <td class="actions">
+                <button class="btn btn-sm btn-outline-primary" onclick="viewCompanyDetail(2)">
+                  <span class="icon icon-eye"></span> 查看
+                </button>
+                <button class="btn btn-sm btn-outline-warning" onclick="suspendCompany(2)">
+                  <span class="icon icon-pause"></span> 暂停
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 企业详情模态框 -->
+  <div class="modal" id="companyModal">
+    <div class="modal-content" style="max-width: 800px;">
+      <div class="modal-header">
+        <h3>企业详情</h3>
+        <span class="close" onclick="closeModal()">&times;</span>
+      </div>
+      <div class="modal-body" id="companyDetailContent"></div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = getCurrentUser();
+      const role = getUserRole();
+      if (!user || role !== 'admin') {
+        window.location.href = '../login.html?role=admin';
+        return;
+      }
+
+      document.getElementById('adminName').textContent = user.name || user.username || '管理员';
+      bindEvents();
+    });
+
+    function bindEvents() {
+      document.getElementById('logoutBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        logout();
+        window.location.href = '../login.html?role=admin';
+      });
+    }
+
+    function approveCompany(id) {
+      if (confirm('确定要通过这家企业的认证申请吗？')) {
+        alert(`企业 ${id} 认证通过！`);
+        location.reload();
+      }
+    }
+
+    function rejectCompany(id) {
+      const reason = prompt('请输入拒绝原因：');
+      if (reason) {
+        alert(`企业 ${id} 认证被拒绝。原因：${reason}`);
+        location.reload();
+      }
+    }
+
+    function viewCompanyDetail(id) {
+      document.getElementById('companyDetailContent').innerHTML = `
+        <div style="padding: 20px;">
+          <h2>企业详细信息</h2>
+          <div style="margin: 20px 0;">
+            <h3>基本信息</h3>
+            <p><strong>企业名称:</strong> 阿里巴巴集团</p>
+            <p><strong>统一社会信用代码:</strong> 91330000XXXXXXXXXX</p>
+            <p><strong>企业类型:</strong> 互联网/软件开发</p>
+            <p><strong>注册资本:</strong> 100亿元</p>
+            
+            <h3>联系信息</h3>
+            <p><strong>联系人:</strong> 张经理</p>
+            <p><strong>联系电话:</strong> 0571-12345678</p>
+            <p><strong>企业邮箱:</strong> hr@alibaba.com</p>
+            <p><strong>企业地址:</strong> 浙江省杭州市余杭区</p>
+            
+            <h3>认证状态</h3>
+            <p><strong>状态:</strong> <span class="status-badge pending">待审核</span></p>
+            <p><strong>提交时间:</strong> 2024-12-05 10:30:00</p>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-success" onclick="approveCompany(${id})">通过认证</button>
+            <button class="btn btn-danger" onclick="rejectCompany(${id})">拒绝认证</button>
+            <button class="btn btn-outline-secondary" onclick="closeModal()">关闭</button>
+          </div>
+        </div>
+      `;
+      document.getElementById('companyModal').style.display = 'flex';
+    }
+
+    function suspendCompany(id) {
+      if (confirm('确定要暂停这家企业的账号吗？')) {
+        alert(`企业 ${id} 已被暂停`);
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('companyModal').style.display = 'none';
+    }
+
+    window.addEventListener('click', (e) => {
+      if (e.target === document.getElementById('companyModal')) {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>

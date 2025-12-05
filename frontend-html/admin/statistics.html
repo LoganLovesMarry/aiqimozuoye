@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数据统计 - 管理员中心</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/icons.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="../index.html" class="navbar-brand">就业管理系统 - 管理员</a>
+      <div class="navbar-menu">
+        <span id="adminName"></span>
+        <a href="#" id="logoutBtn">退出登录</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="dashboard-container">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h2>管理中心</h2>
+      </div>
+      <div class="sidebar-menu">
+        <a href="dashboard.html" class="menu-item">
+          <span class="icon icon-dashboard"></span> 控制台
+        </a>
+        <a href="users.html" class="menu-item">
+          <span class="icon icon-users"></span> 用户管理
+        </a>
+        <a href="companies.html" class="menu-item">
+          <span class="icon icon-building"></span> 企业管理
+        </a>
+        <a href="jobs.html" class="menu-item">
+          <span class="icon icon-briefcase"></span> 职位审核
+        </a>
+        <a href="statistics.html" class="menu-item active">
+          <span class="icon icon-dashboard"></span> 数据统计
+        </a>
+        <a href="system.html" class="menu-item">
+          <span class="icon icon-settings"></span> 系统设置
+        </a>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h1>数据统计</h1>
+        <select class="filter-dropdown">
+          <option>本月</option>
+          <option>本季度</option>
+          <option>本年</option>
+        </select>
+      </div>
+
+      <!-- 核心指标 -->
+      <div class="stats-cards">
+        <div class="stat-card green">
+          <h3>注册用户总数</h3>
+          <div class="value">1,234</div>
+          <div class="trend">
+            <span class="icon">↗</span> +156 本月
+          </div>
+        </div>
+
+        <div class="stat-card blue">
+          <h3>入驻企业总数</h3>
+          <div class="value">456</div>
+          <div class="trend">
+            <span class="icon">↗</span> +42 本月
+          </div>
+        </div>
+
+        <div class="stat-card orange">
+          <h3>发布职位总数</h3>
+          <div class="value">2,345</div>
+          <div class="trend">
+            <span class="icon">↗</span> +238 本月
+          </div>
+        </div>
+
+        <div class="stat-card purple">
+          <h3>总就业率</h3>
+          <div class="value">87.5%</div>
+          <div class="trend">
+            <span class="icon">↗</span> +3.2% 本月
+          </div>
+        </div>
+      </div>
+
+      <!-- 用户增长趋势 -->
+      <div class="chart-container">
+        <h3><span class="icon icon-users"></span> 用户增长趋势</h3>
+        <div class="chart-placeholder">
+          📈 图表占位符 - 用户增长曲线图
+        </div>
+      </div>
+
+      <!-- 就业数据分析 -->
+      <div class="chart-container">
+        <h3><span class="icon icon-star"></span> 就业数据分析</h3>
+        <div class="chart-placeholder">
+          📊 图表占位符 - 就业率统计柱状图
+        </div>
+      </div>
+
+      <!-- 专业分布 -->
+      <div class="content-card">
+        <h2><span class="icon icon-education"></span> 专业分布统计</h2>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>专业</th>
+              <th>学生人数</th>
+              <th>就业人数</th>
+              <th>就业率</th>
+              <th>平均薪资</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>计算机科学与技术</td>
+              <td>320</td>
+              <td>295</td>
+              <td>
+                <span class="status-badge active">92.2%</span>
+                <div class="progress-bar">
+                  <div class="progress-bar-fill" style="width: 92.2%"></div>
+                </div>
+              </td>
+              <td>¥12,500</td>
+            </tr>
+            <tr>
+              <td>软件工程</td>
+              <td>280</td>
+              <td>252</td>
+              <td>
+                <span class="status-badge active">90.0%</span>
+                <div class="progress-bar">
+                  <div class="progress-bar-fill" style="width: 90%"></div>
+                </div>
+              </td>
+              <td>¥11,800</td>
+            </tr>
+            <tr>
+              <td>数据科学与大数据技术</td>
+              <td>180</td>
+              <td>153</td>
+              <td>
+                <span class="status-badge active">85.0%</span>
+                <div class="progress-bar">
+                  <div class="progress-bar-fill" style="width: 85%"></div>
+                </div>
+              </td>
+              <td>¥13,200</td>
+            </tr>
+            <tr>
+              <td>人工智能</td>
+              <td>150</td>
+              <td>135</td>
+              <td>
+                <span class="status-badge active">90.0%</span>
+                <div class="progress-bar">
+                  <div class="progress-bar-fill" style="width: 90%"></div>
+                </div>
+              </td>
+              <td>¥14,500</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 热门职位 -->
+      <div class="content-card">
+        <h2><span class="icon icon-briefcase"></span> 热门职位TOP10</h2>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>排名</th>
+              <th>职位名称</th>
+              <th>发布企业数</th>
+              <th>投递人数</th>
+              <th>平均薪资</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Java开发工程师</td>
+              <td>85</td>
+              <td>456</td>
+              <td>¥15,000-25,000</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>前端开发工程师</td>
+              <td>72</td>
+              <td>389</td>
+              <td>¥12,000-20,000</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Python开发工程师</td>
+              <td>56</td>
+              <td>301</td>
+              <td>¥14,000-22,000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = getCurrentUser();
+      const role = getUserRole();
+      if (!user || role !== 'admin') {
+        window.location.href = '../login.html?role=admin';
+        return;
+      }
+
+      document.getElementById('adminName').textContent = user.name || user.username || '管理员';
+      bindEvents();
+    });
+
+    function bindEvents() {
+      document.getElementById('logoutBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        logout();
+        window.location.href = '../login.html?role=admin';
+      });
+    }
+  </script>
+</body>
+</html>

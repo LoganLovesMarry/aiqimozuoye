@@ -3,142 +3,348 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>学生仪表板 - 就业管理系统</title>
+  <title>学生中心 - 就业管理系统</title>
   <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/icons.css">
+  <link rel="stylesheet" href="../css/student.css">
 </head>
 <body>
   <nav class="navbar">
     <div class="container">
-      <a href="../index.html" class="navbar-brand">就业管理系统</a>
+      <a href="../index.html" class="navbar-brand">就业管理系统 - 学生</a>
       <div class="navbar-menu">
-        <span>欢迎，<span class="user-name"></span></span>
-        <button onclick="logout()" class="btn btn-danger">退出</button>
+        <span id="studentName"></span>
+        <a href="#" id="logoutBtn">退出登录</a>
       </div>
     </div>
   </nav>
 
-  <div class="dashboard-layout">
-    <aside class="sidebar">
-      <ul class="sidebar-menu">
-        <li><a href="dashboard.html" class="active">仪表板</a></li>
-        <li><a href="jobs.html">职位列表</a></li>
-        <li><a href="applications.html">我的投递</a></li>
-        <li><a href="profile.html">个人信息</a></li>
-      </ul>
-    </aside>
+  <div class="dashboard-container">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h2>学生中心</h2>
+      </div>
+      <div class="sidebar-menu">
+        <a href="dashboard.html" class="menu-item active">
+          <span class="icon icon-dashboard"></span> 控制台
+        </a>
+        <a href="jobs.html" class="menu-item">
+          <span class="icon icon-briefcase"></span> 浏览职位
+        </a>
+        <a href="applications.html" class="menu-item">
+          <span class="icon icon-file"></span> 我的投递
+        </a>
+        <a href="resume.html" class="menu-item">
+          <span class="icon icon-document"></span> 我的简历
+        </a>
+        <a href="profile.html" class="menu-item">
+          <span class="icon icon-user"></span> 个人信息
+        </a>
+      </div>
+    </div>
 
-    <main class="main-content">
-      <h1>欢迎回来！</h1>
-      <p class="mb-3">这是您的求职概览</p>
+    <div class="main-content">
+      <div class="page-header">
+        <h1>欢迎回来！</h1>
+      </div>
 
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-label">投递中</div>
-          <div class="stat-value" id="pendingCount">0</div>
+      <!-- 数据统计 -->
+      <div class="stats-cards">
+        <div class="stat-card purple">
+          <h3>投递中</h3>
+          <div class="value" id="pendingCount">0</div>
+          <div class="desc">待查看/已查看</div>
+          <div class="icon-wrapper">
+            <span class="icon icon-send"></span>
+          </div>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">面试中</div>
-          <div class="stat-value" id="interviewCount">0</div>
+
+        <div class="stat-card blue">
+          <h3>面试邀请</h3>
+          <div class="value" id="interviewCount">0</div>
+          <div class="desc">面试中</div>
+          <div class="icon-wrapper">
+            <span class="icon icon-calendar"></span>
+          </div>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">已录用</div>
-          <div class="stat-value" id="hiredCount">0</div>
+
+        <div class="stat-card green">
+          <h3>录用通知</h3>
+          <div class="value" id="hiredCount">0</div>
+          <div class="desc">已录用</div>
+          <div class="icon-wrapper">
+            <span class="icon icon-check"></span>
+          </div>
+        </div>
+
+        <div class="stat-card orange">
+          <h3>浏览职位</h3>
+          <div class="value" id="jobCount">0</div>
+          <div class="desc">最新职位</div>
+          <div class="icon-wrapper">
+            <span class="icon icon-briefcase"></span>
+          </div>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-header">
-          <h3 class="card-title">最近投递</h3>
-        </div>
-        <div id="recentApplications">
-          <div class="loading">加载中...</div>
+      <!-- 快速操作 -->
+      <div class="content-card">
+        <h2><span class="icon icon-tools"></span> 快速操作</h2>
+        <div class="quick-actions">
+          <a href="jobs.html" class="quick-action-btn">
+            <span class="icon">💼</span>
+            <div class="label">浏览职位</div>
+          </a>
+          <a href="resume.html" class="quick-action-btn">
+            <span class="icon">📄</span>
+            <div class="label">完善简历</div>
+          </a>
+          <a href="applications.html" class="quick-action-btn">
+            <span class="icon">📊</span>
+            <div class="label">投递记录</div>
+          </a>
+          <a href="profile.html" class="quick-action-btn">
+            <span class="icon">👤</span>
+            <div class="label">个人设置</div>
+          </a>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-header">
-          <h3 class="card-title">系统公告</h3>
-        </div>
-        <div id="announcements">
-          <div class="loading">加载中...</div>
+      <!-- 最近投递 -->
+      <div class="content-card">
+        <h2><span class="icon icon-file"></span> 最近投递</h2>
+        <div class="application-list" id="recentApplications">
+          <div class="empty-state">
+            <div class="icon">📭</div>
+            <h3>暂无投递记录</h3>
+            <p>快去浏览心仪的职位吧！</p>
+          </div>
         </div>
       </div>
-    </main>
+
+      <!-- 推荐职位 -->
+      <div class="content-card">
+        <h2><span class="icon icon-star"></span> 推荐职位</h2>
+        <div class="job-list" id="recommendedJobs">
+          <div class="empty-state">
+            <div class="icon">💼</div>
+            <h3>暂无推荐职位</h3>
+            <p>系统正在为您匹配合适的职位...</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="../js/api.js"></script>
   <script src="../js/auth.js"></script>
   <script>
-    // 检查登录和角色
-    if (!initPage('student')) {
-      throw new Error('未授权访问');
-    }
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = getCurrentUser();
+      const role = getUserRole();
+      if (!user || role !== 'student') {
+        window.location.href = '../login.html?role=student';
+        return;
+      }
 
-    const user = getUser();
+      document.getElementById('studentName').textContent = user.name || user.email || '学生';
+      await loadDashboardData();
+      bindEvents();
+    });
 
-    // 加载数据
-    async function loadData() {
+    async function loadDashboardData() {
       try {
-        const [appsRes, announcementsRes] = await Promise.all([
-          applicationApi.getByStudentId(user.id),
-          announcementApi.getActive()
-        ]);
+        const user = getCurrentUser();
+        
+        // 加载投递统计（模拟数据）
+        document.getElementById('pendingCount').textContent = '3';
+        document.getElementById('interviewCount').textContent = '1';
+        document.getElementById('hiredCount').textContent = '0';
+        document.getElementById('jobCount').textContent = '25';
 
-        if (appsRes.code === 200) {
-          const apps = appsRes.data;
-          
-          // 更新统计
-          document.getElementById('pendingCount').textContent = 
-            apps.filter(a => a.status === 0 || a.status === 1).length;
-          document.getElementById('interviewCount').textContent = 
-            apps.filter(a => a.status === 2).length;
-          document.getElementById('hiredCount').textContent = 
-            apps.filter(a => a.status === 3).length;
+        // 加载最近投递
+        loadRecentApplications();
 
-          // 显示最近投递
-          const recentDiv = document.getElementById('recentApplications');
-          if (apps.length === 0) {
-            recentDiv.innerHTML = '<div class="empty-state">暂无投递记录</div>';
-          } else {
-            recentDiv.innerHTML = apps.slice(0, 5).map(app => `
-              <div style="padding: 1rem; border-bottom: 1px solid #e5e7eb;">
-                <div style="display: flex; justify-content: space-between;">
-                  <div>
-                    <strong>${app.jobTitle}</strong>
-                    <div style="color: #6b7280; font-size: 0.875rem;">${app.companyName}</div>
-                  </div>
-                  <span class="badge ${
-                    app.status === 3 ? 'badge-success' :
-                    app.status === 2 ? 'badge-warning' :
-                    app.status === 4 ? 'badge-danger' : 'badge-info'
-                  }">${ApplicationStatus[app.status]}</span>
-                </div>
-              </div>
-            `).join('');
-          }
-        }
-
-        if (announcementsRes.code === 200) {
-          const announcements = announcementsRes.data;
-          const announcementsDiv = document.getElementById('announcements');
-          
-          if (announcements.length === 0) {
-            announcementsDiv.innerHTML = '<div class="empty-state">暂无公告</div>';
-          } else {
-            announcementsDiv.innerHTML = announcements.slice(0, 5).map(item => `
-              <div style="padding: 1rem; border-bottom: 1px solid #e5e7eb;">
-                <strong>${item.title}</strong>
-                <p style="color: #6b7280; margin-top: 0.5rem;">${item.content}</p>
-              </div>
-            `).join('');
-          }
-        }
+        // 加载推荐职位
+        loadRecommendedJobs();
       } catch (error) {
         console.error('加载数据失败:', error);
       }
     }
 
-    loadData();
+    function loadRecentApplications() {
+      // 模拟数据
+      const applications = [
+        {
+          id: 1,
+          jobTitle: 'Java开发工程师',
+          company: '腾讯科技',
+          status: 1, // 已查看
+          applyTime: '2025-12-04'
+        },
+        {
+          id: 2,
+          jobTitle: '前端开发工程师',
+          company: '阿里巴巴',
+          status: 2, // 面试中
+          applyTime: '2025-12-03'
+        },
+        {
+          id: 3,
+          jobTitle: 'Python开发',
+          company: '字节跳动',
+          status: 0, // 待查看
+          applyTime: '2025-12-02'
+        }
+      ];
+
+      const container = document.getElementById('recentApplications');
+      if (applications.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="icon">📭</div>
+            <h3>暂无投递记录</h3>
+            <p>快去浏览心仪的职位吧！</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = applications.map(app => `
+        <div class="application-item">
+          <div class="item-header">
+            <div class="job-title">${app.jobTitle}</div>
+            <span class="status-badge ${getStatusClass(app.status)}">
+              ${getStatusText(app.status)}
+            </span>
+          </div>
+          <div class="company">
+            <span class="icon icon-building"></span> ${app.company}
+          </div>
+          <div class="meta">
+            <span><span class="icon icon-clock"></span> ${app.applyTime}</span>
+          </div>
+          <div class="actions">
+            <button class="btn btn-sm btn-outline-primary" onclick="viewApplication(${app.id})">
+              <span class="icon icon-eye"></span> 查看详情
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function loadRecommendedJobs() {
+      // 模拟数据
+      const jobs = [
+        {
+          id: 1,
+          title: 'Java后端开发工程师',
+          company: '华为技术有限公司',
+          salary: '15-25K',
+          location: '深圳-南山区',
+          experience: '3-5年',
+          education: '本科'
+        },
+        {
+          id: 2,
+          title: 'Web前端工程师',
+          company: '美团',
+          salary: '12-20K',
+          location: '北京-朝阳区',
+          experience: '1-3年',
+          education: '本科'
+        },
+        {
+          id: 3,
+          title: 'Python开发工程师',
+          company: '百度',
+          salary: '18-30K',
+          location: '北京-海淀区',
+          experience: '3-5年',
+          education: '本科'
+        }
+      ];
+
+      const container = document.getElementById('recommendedJobs');
+      if (jobs.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="icon">💼</div>
+            <h3>暂无推荐职位</h3>
+            <p>系统正在为您匹配合适的职位...</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = jobs.map(job => `
+        <div class="job-card" onclick="viewJob(${job.id})">
+          <div class="company-logo">${job.company.charAt(0)}</div>
+          <div class="job-title">${job.title}</div>
+          <div class="company-name">
+            <span class="icon icon-building"></span> ${job.company}
+          </div>
+          <div class="job-tags">
+            <span class="tag salary">${job.salary}</span>
+            <span class="tag">${job.location}</span>
+            <span class="tag">${job.experience}</span>
+            <span class="tag">${job.education}</span>
+          </div>
+          <div class="job-footer">
+            <span style="color: #95a5a6; font-size: 0.9em;">今天</span>
+            <button class="btn btn-sm btn-primary" onclick="applyJob(event, ${job.id})">
+              投递简历
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function getStatusClass(status) {
+      const classes = {
+        0: 'pending',
+        1: 'viewed',
+        2: 'interview',
+        3: 'hired',
+        4: 'rejected'
+      };
+      return classes[status] || 'pending';
+    }
+
+    function getStatusText(status) {
+      const texts = {
+        0: '待查看',
+        1: '已查看',
+        2: '面试中',
+        3: '已录用',
+        4: '已拒绝'
+      };
+      return texts[status] || '未知';
+    }
+
+    function viewApplication(id) {
+      window.location.href = `applications.html?id=${id}`;
+    }
+
+    function viewJob(id) {
+      window.location.href = `jobs.html?id=${id}`;
+    }
+
+    function applyJob(event, id) {
+      event.stopPropagation();
+      if (confirm('确定要投递这个职位吗？')) {
+        alert('投递成功！您可以在"我的投递"中查看进度。');
+        // 实际应该调用API
+      }
+    }
+
+    function bindEvents() {
+      document.getElementById('logoutBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        logout();
+        window.location.href = '../login.html?role=student';
+      });
+    }
   </script>
 </body>
 </html>

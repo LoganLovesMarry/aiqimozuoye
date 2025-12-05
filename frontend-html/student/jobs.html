@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>浏览职位 - 学生中心</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/icons.css">
+  <link rel="stylesheet" href="../css/student.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="../index.html" class="navbar-brand">就业管理系统 - 学生</a>
+      <div class="navbar-menu">
+        <span id="studentName"></span>
+        <a href="#" id="logoutBtn">退出登录</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="dashboard-container">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h2>学生中心</h2>
+      </div>
+      <div class="sidebar-menu">
+        <a href="dashboard.html" class="menu-item">
+          <span class="icon icon-dashboard"></span> 控制台
+        </a>
+        <a href="jobs.html" class="menu-item active">
+          <span class="icon icon-briefcase"></span> 浏览职位
+        </a>
+        <a href="applications.html" class="menu-item">
+          <span class="icon icon-file"></span> 我的投递
+        </a>
+        <a href="resume.html" class="menu-item">
+          <span class="icon icon-document"></span> 我的简历
+        </a>
+        <a href="profile.html" class="menu-item">
+          <span class="icon icon-user"></span> 个人信息
+        </a>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h1>浏览职位</h1>
+      </div>
+
+      <!-- 搜索和筛选 -->
+      <div class="search-bar">
+        <input type="text" class="search-input" placeholder="搜索职位名称、公司..." id="searchInput">
+        <button class="filter-btn" id="filterAll">全部职位</button>
+        <button class="filter-btn" id="filterLatest">最新发布</button>
+        <button class="filter-btn" id="filterHot">热门职位</button>
+        <select class="filter-btn" id="salaryFilter">
+          <option value="">薪资范围</option>
+          <option value="0-10">10K以下</option>
+          <option value="10-20">10-20K</option>
+          <option value="20-30">20-30K</option>
+          <option value="30+">30K以上</option>
+        </select>
+      </div>
+
+      <!-- 职位列表 -->
+      <div class="job-list" id="jobList">
+        <!-- 职位卡片将在这里动态生成 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 职位详情模态框 -->
+  <div class="modal" id="jobModal">
+    <div class="modal-content" style="max-width: 800px;">
+      <div class="modal-header">
+        <h3>职位详情</h3>
+        <span class="close" onclick="closeModal()">&times;</span>
+      </div>
+      <div class="modal-body" id="jobDetailContent"></div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = getCurrentUser();
+      const role = getUserRole();
+      if (!user || role !== 'student') {
+        window.location.href = '../login.html?role=student';
+        return;
+      }
+
+      document.getElementById('studentName').textContent = user.name || user.email || '学生';
+      await loadJobs();
+      bindEvents();
+    });
+
+    async function loadJobs() {
+      // 模拟数据
+      const jobs = [
+        {
+          id: 1,
+          title: 'Java开发工程师',
+          company: '腾讯科技',
+          salary: '15-25K',
+          location: '深圳-南山区',
+          experience: '3-5年',
+          education: '本科',
+          jobType: '全职',
+          publishTime: '2天前',
+          description: '负责公司核心业务系统的开发和维护，参与系统架构设计...'
+        },
+        {
+          id: 2,
+          title: '前端开发工程师',
+          company: '阿里巴巴',
+          salary: '18-30K',
+          location: '杭州-余杭区',
+          experience: '3-5年',
+          education: '本科',
+          jobType: '全职',
+          publishTime: '1天前',
+          description: '负责前端页面开发，与后端协作完成功能开发...'
+        },
+        {
+          id: 3,
+          title: 'Python开发工程师',
+          company: '字节跳动',
+          salary: '20-35K',
+          location: '北京-海淀区',
+          experience: '3-5年',
+          education: '本科',
+          jobType: '全职',
+          publishTime: '3天前',
+          description: '负责数据平台的开发和维护...'
+        },
+        {
+          id: 4,
+          title: 'UI/UX设计师',
+          company: '华为',
+          salary: '12-18K',
+          location: '深圳-龙岗区',
+          experience: '1-3年',
+          education: '本科',
+          jobType: '全职',
+          publishTime: '1周前',
+          description: '负责产品界面设计，提升用户体验...'
+        },
+        {
+          id: 5,
+          title: '数据分析师',
+          company: '美团',
+          salary: '15-22K',
+          location: '北京-朝阳区',
+          experience: '2-4年',
+          education: '本科',
+          jobType: '全职',
+          publishTime: '5天前',
+          description: '负责业务数据分析，提供决策支持...'
+        },
+        {
+          id: 6,
+          title: '测试工程师',
+          company: '百度',
+          salary: '10-18K',
+          location: '北京-海淀区',
+          experience: '1-3年',
+          education: '本科',
+          jobType: '全职',
+          publishTime: '3天前',
+          description: '负责产品测试，保证产品质量...'
+        }
+      ];
+
+      const container = document.getElementById('jobList');
+      container.innerHTML = jobs.map(job => `
+        <div class="job-card" onclick="viewJobDetail(${job.id})">
+          <div class="company-logo">${job.company.charAt(0)}</div>
+          <div class="job-title">${job.title}</div>
+          <div class="company-name">
+            <span class="icon icon-building"></span> ${job.company}
+          </div>
+          <div class="job-tags">
+            <span class="tag salary">${job.salary}</span>
+            <span class="tag">${job.location}</span>
+            <span class="tag">${job.experience}</span>
+            <span class="tag">${job.education}</span>
+          </div>
+          <div class="job-footer">
+            <span style="color: #95a5a6; font-size: 0.9em;">${job.publishTime}</span>
+            <button class="btn btn-sm btn-primary" onclick="applyJob(event, ${job.id})">
+              <span class="icon icon-send"></span> 投递简历
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function viewJobDetail(id) {
+      // 模拟职位详情
+      const jobDetail = {
+        title: 'Java开发工程师',
+        company: '腾讯科技',
+        salary: '15-25K',
+        location: '深圳-南山区',
+        experience: '3-5年',
+        education: '本科',
+        jobType: '全职',
+        description: '负责公司核心业务系统的开发和维护，参与系统架构设计，优化系统性能。',
+        requirements: [
+          '3年以上Java开发经验',
+          '熟悉Spring、SpringBoot等框架',
+          '熟悉MySQL数据库',
+          '具有良好的代码规范和文档编写能力',
+          '有大型项目经验者优先'
+        ],
+        benefits: [
+          '五险一金',
+          '带薪年假',
+          '定期体检',
+          '员工旅游',
+          '弹性工作',
+          '下午茶'
+        ]
+      };
+
+      document.getElementById('jobDetailContent').innerHTML = `
+        <div style="padding: 20px;">
+          <h2>${jobDetail.title}</h2>
+          <div style="display: flex; gap: 15px; margin: 20px 0; color: #7f8c8d;">
+            <span><span class="icon icon-building"></span> ${jobDetail.company}</span>
+            <span><span class="icon icon-location"></span> ${jobDetail.location}</span>
+          </div>
+          
+          <div style="display: flex; gap: 10px; margin-bottom: 30px;">
+            <span class="status-badge" style="background: #ffeaa7; color: #d63031; font-weight: 600;">
+              ${jobDetail.salary}/月
+            </span>
+            <span class="status-badge" style="background: #dfe6e9; color: #2d3436;">
+              ${jobDetail.experience}
+            </span>
+            <span class="status-badge" style="background: #dfe6e9; color: #2d3436;">
+              ${jobDetail.education}
+            </span>
+            <span class="status-badge" style="background: #dfe6e9; color: #2d3436;">
+              ${jobDetail.jobType}
+            </span>
+          </div>
+
+          <h3 style="color: #2c3e50; margin-top: 20px;">职位描述</h3>
+          <p style="line-height: 1.8;">${jobDetail.description}</p>
+
+          <h3 style="color: #2c3e50; margin-top: 20px;">任职要求</h3>
+          <ul style="line-height: 2;">
+            ${jobDetail.requirements.map(req => `<li>${req}</li>`).join('')}
+          </ul>
+
+          <h3 style="color: #2c3e50; margin-top: 20px;">福利待遇</h3>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px;">
+            ${jobDetail.benefits.map(benefit => `
+              <span style="padding: 6px 15px; background: #e8f5e9; color: #2e7d32; border-radius: 20px;">
+                ✓ ${benefit}
+              </span>
+            `).join('')}
+          </div>
+
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-primary" onclick="applyJobFromModal(${id})">
+              <span class="icon icon-send"></span> 投递简历
+            </button>
+            <button class="btn btn-outline-secondary" onclick="closeModal()">关闭</button>
+          </div>
+        </div>
+      `;
+      
+      document.getElementById('jobModal').style.display = 'flex';
+    }
+
+    function applyJob(event, id) {
+      event.stopPropagation();
+      if (confirm('确定要投递这个职位吗？')) {
+        alert('投递成功！您可以在"我的投递"中查看进度。');
+        // 实际应该调用API
+      }
+    }
+
+    function applyJobFromModal(id) {
+      closeModal();
+      if (confirm('确定要投递这个职位吗？')) {
+        alert('投递成功！您可以在"我的投递"中查看进度。');
+        // 实际应该调用API
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('jobModal').style.display = 'none';
+    }
+
+    function bindEvents() {
+      document.getElementById('logoutBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        logout();
+        window.location.href = '../login.html?role=student';
+      });
+
+      // 搜索功能
+      document.getElementById('searchInput').addEventListener('input', (e) => {
+        console.log('搜索:', e.target.value);
+      });
+
+      // 筛选功能
+      document.getElementById('filterAll').addEventListener('click', () => {
+        console.log('显示全部职位');
+      });
+
+      document.getElementById('filterLatest').addEventListener('click', () => {
+        console.log('显示最新发布');
+      });
+
+      document.getElementById('filterHot').addEventListener('click', () => {
+        console.log('显示热门职位');
+      });
+
+      document.getElementById('salaryFilter').addEventListener('change', (e) => {
+        console.log('薪资筛选:', e.target.value);
+      });
+
+      // 点击模态框外部关闭
+      window.addEventListener('click', (e) => {
+        if (e.target === document.getElementById('jobModal')) {
+          closeModal();
+        }
+      });
+    }
+  </script>
+</body>
+</html>

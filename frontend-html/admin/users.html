@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用户管理 - 管理员中心</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/icons.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="../index.html" class="navbar-brand">就业管理系统 - 管理员</a>
+      <div class="navbar-menu">
+        <span id="adminName"></span>
+        <a href="#" id="logoutBtn">退出登录</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="dashboard-container">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h2>管理中心</h2>
+      </div>
+      <div class="sidebar-menu">
+        <a href="dashboard.html" class="menu-item">
+          <span class="icon icon-dashboard"></span> 控制台
+        </a>
+        <a href="users.html" class="menu-item active">
+          <span class="icon icon-users"></span> 用户管理
+        </a>
+        <a href="companies.html" class="menu-item">
+          <span class="icon icon-building"></span> 企业管理
+        </a>
+        <a href="jobs.html" class="menu-item">
+          <span class="icon icon-briefcase"></span> 职位审核
+        </a>
+        <a href="statistics.html" class="menu-item">
+          <span class="icon icon-dashboard"></span> 数据统计
+        </a>
+        <a href="system.html" class="menu-item">
+          <span class="icon icon-settings"></span> 系统设置
+        </a>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h1>用户管理</h1>
+        <button class="btn btn-primary" onclick="openAddUserModal()">
+          <span class="icon icon-plus"></span> 添加用户
+        </button>
+      </div>
+
+      <!-- 搜索和筛选 -->
+      <div class="search-filter-bar">
+        <div class="search-box">
+          <input type="text" placeholder="搜索用户名、姓名、邮箱..." id="searchInput">
+          <span class="search-icon icon icon-search"></span>
+        </div>
+        <select class="filter-dropdown" id="roleFilter">
+          <option value="all">全部角色</option>
+          <option value="student">学生</option>
+          <option value="company">企业</option>
+          <option value="admin">管理员</option>
+        </select>
+        <select class="filter-dropdown" id="statusFilter">
+          <option value="all">全部状态</option>
+          <option value="active">正常</option>
+          <option value="inactive">已禁用</option>
+        </select>
+      </div>
+
+      <!-- 用户列表 -->
+      <div class="content-card">
+        <h2><span class="icon icon-users"></span> 用户列表</h2>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>用户名</th>
+              <th>姓名</th>
+              <th>邮箱</th>
+              <th>角色</th>
+              <th>状态</th>
+              <th>注册时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="userTableBody">
+            <tr>
+              <td>1</td>
+              <td>zhangsan</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <div class="user-avatar">张</div>
+                  <span>张三</span>
+                </div>
+              </td>
+              <td>zhangsan@example.com</td>
+              <td><span class="status-badge approved">学生</span></td>
+              <td><span class="status-badge active">正常</span></td>
+              <td>2024-12-01</td>
+              <td class="actions">
+                <button class="btn btn-sm btn-outline-primary" onclick="viewUser(1)">
+                  <span class="icon icon-eye"></span> 查看
+                </button>
+                <button class="btn btn-sm btn-outline-secondary" onclick="editUser(1)">
+                  <span class="icon icon-edit"></span> 编辑
+                </button>
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteUser(1)">
+                  <span class="icon icon-delete"></span> 删除
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>lisi</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <div class="user-avatar">李</div>
+                  <span>李四</span>
+                </div>
+              </td>
+              <td>lisi@example.com</td>
+              <td><span class="status-badge approved">学生</span></td>
+              <td><span class="status-badge active">正常</span></td>
+              <td>2024-12-02</td>
+              <td class="actions">
+                <button class="btn btn-sm btn-outline-primary" onclick="viewUser(2)">
+                  <span class="icon icon-eye"></span> 查看
+                </button>
+                <button class="btn btn-sm btn-outline-secondary" onclick="editUser(2)">
+                  <span class="icon icon-edit"></span> 编辑
+                </button>
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteUser(2)">
+                  <span class="icon icon-delete"></span> 删除
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 用户详情模态框 -->
+  <div class="modal" id="userModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>用户详情</h3>
+        <span class="close" onclick="closeModal()">&times;</span>
+      </div>
+      <div class="modal-body" id="userDetailContent"></div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = getCurrentUser();
+      const role = getUserRole();
+      if (!user || role !== 'admin') {
+        window.location.href = '../login.html?role=admin';
+        return;
+      }
+
+      document.getElementById('adminName').textContent = user.name || user.username || '管理员';
+      await loadUsers();
+      bindEvents();
+    });
+
+    async function loadUsers() {
+      try {
+        // 实际应该调用API加载用户列表
+        // const users = await adminApi.getUsers();
+        console.log('用户列表加载完成');
+      } catch (error) {
+        console.error('加载用户列表失败:', error);
+      }
+    }
+
+    function bindEvents() {
+      document.getElementById('logoutBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        logout();
+        window.location.href = '../login.html?role=admin';
+      });
+
+      // 搜索功能
+      document.getElementById('searchInput').addEventListener('input', (e) => {
+        const keyword = e.target.value.toLowerCase();
+        // 实现搜索逻辑
+        console.log('搜索:', keyword);
+      });
+
+      // 筛选功能
+      document.getElementById('roleFilter').addEventListener('change', (e) => {
+        console.log('筛选角色:', e.target.value);
+      });
+
+      document.getElementById('statusFilter').addEventListener('change', (e) => {
+        console.log('筛选状态:', e.target.value);
+      });
+    }
+
+    function viewUser(id) {
+      document.getElementById('userDetailContent').innerHTML = `
+        <div style="padding: 20px;">
+          <h2>用户详细信息</h2>
+          <div style="margin: 20px 0;">
+            <p><strong>用户ID:</strong> ${id}</p>
+            <p><strong>用户名:</strong> zhangsan</p>
+            <p><strong>姓名:</strong> 张三</p>
+            <p><strong>邮箱:</strong> zhangsan@example.com</p>
+            <p><strong>角色:</strong> 学生</p>
+            <p><strong>状态:</strong> 正常</p>
+            <p><strong>注册时间:</strong> 2024-12-01 10:30:00</p>
+          </div>
+          <button class="btn btn-primary" onclick="closeModal()">关闭</button>
+        </div>
+      `;
+      document.getElementById('userModal').style.display = 'flex';
+    }
+
+    function editUser(id) {
+      alert(`编辑用户 ID: ${id}`);
+    }
+
+    function deleteUser(id) {
+      if (confirm('确定要删除这个用户吗？此操作不可恢复！')) {
+        alert(`用户 ${id} 已删除`);
+        // 实际应该调用API
+      }
+    }
+
+    function openAddUserModal() {
+      alert('添加用户功能开发中...');
+    }
+
+    function closeModal() {
+      document.getElementById('userModal').style.display = 'none';
+    }
+
+    window.addEventListener('click', (e) => {
+      if (e.target === document.getElementById('userModal')) {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>

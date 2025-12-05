@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的简历 - 学生中心</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/icons.css">
+  <link rel="stylesheet" href="../css/student.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="../index.html" class="navbar-brand">就业管理系统 - 学生</a>
+      <div class="navbar-menu">
+        <span id="studentName"></span>
+        <a href="#" id="logoutBtn">退出登录</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="dashboard-container">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h2>学生中心</h2>
+      </div>
+      <div class="sidebar-menu">
+        <a href="dashboard.html" class="menu-item">
+          <span class="icon icon-dashboard"></span> 控制台
+        </a>
+        <a href="jobs.html" class="menu-item">
+          <span class="icon icon-briefcase"></span> 浏览职位
+        </a>
+        <a href="applications.html" class="menu-item">
+          <span class="icon icon-file"></span> 我的投递
+        </a>
+        <a href="resume.html" class="menu-item active">
+          <span class="icon icon-document"></span> 我的简历
+        </a>
+        <a href="profile.html" class="menu-item">
+          <span class="icon icon-user"></span> 个人信息
+        </a>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h1>我的简历</h1>
+        <button class="btn btn-primary" onclick="document.getElementById('resumeFile').click()">
+          <span class="icon icon-upload"></span> 上传简历
+        </button>
+        <input type="file" id="resumeFile" style="display: none;" accept=".pdf,.doc,.docx">
+      </div>
+
+      <!-- 简历状态卡片 -->
+      <div class="resume-card">
+        <h3>简历完善度</h3>
+        <div class="resume-status">80% 完成</div>
+        <div style="margin: 20px 0;">
+          <div class="progress-bar" style="height: 10px; background: rgba(255,255,255,0.3);">
+            <div class="progress-bar-fill" style="width: 80%; background: white;"></div>
+          </div>
+        </div>
+        <p>完善简历可以提高投递成功率！</p>
+        <div class="resume-actions">
+          <button class="btn" onclick="editResume()">
+            <span class="icon icon-edit"></span> 编辑简历
+          </button>
+          <button class="btn" onclick="previewResume()">
+            <span class="icon icon-eye"></span> 预览简历
+          </button>
+        </div>
+      </div>
+
+      <!-- 简历内容 -->
+      <div class="content-card">
+        <h2><span class="icon icon-user"></span> 基本信息</h2>
+        <div class="profile-section">
+          <div class="section-content" id="basicInfo">
+            <p><strong>姓名：</strong><span id="userName">加载中...</span></p>
+            <p><strong>专业：</strong><span id="userMajor">加载中...</span></p>
+            <p><strong>学历：</strong>本科</p>
+            <p><strong>毕业时间：</strong>2026年6月</p>
+            <p><strong>电话：</strong>138****8888</p>
+            <p><strong>邮箱：</strong><span id="userEmail">加载中...</span></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <h2><span class="icon icon-education"></span> 教育经历</h2>
+        <div class="profile-section">
+          <div class="section-content">
+            <p><strong>2022.09 - 2026.06</strong></p>
+            <p><strong>某某大学 - 计算机科学与技术 - 本科</strong></p>
+            <p>主修课程：数据结构、算法、操作系统、计算机网络等</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <h2><span class="icon icon-briefcase"></span> 项目经验</h2>
+        <div class="profile-section">
+          <div class="section-content">
+            <p><strong>就业管理系统</strong></p>
+            <p>基于Spring Boot和Vue的在线就业管理平台...</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <h2><span class="icon icon-tools"></span> 技能特长</h2>
+        <div class="profile-section">
+          <div class="section-content">
+            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+              <span class="status-badge" style="background: #e3f2fd; color: #1976d2;">Java</span>
+              <span class="status-badge" style="background: #e3f2fd; color: #1976d2;">Spring Boot</span>
+              <span class="status-badge" style="background: #e3f2fd; color: #1976d2;">MySQL</span>
+              <span class="status-badge" style="background: #e3f2fd; color: #1976d2;">Vue.js</span>
+              <span class="status-badge" style="background: #e3f2fd; color: #1976d2;">Git</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = getCurrentUser();
+      const role = getUserRole();
+      if (!user || role !== 'student') {
+        window.location.href = '../login.html?role=student';
+        return;
+      }
+
+      // 显示用户名
+      document.getElementById('studentName').textContent = user.name || user.email || '学生';
+      
+      // 填充基本信息
+      document.getElementById('userName').textContent = user.name || '未设置';
+      document.getElementById('userEmail').textContent = user.email || '未设置';
+      document.getElementById('userMajor').textContent = user.major || '未设置';
+      
+      bindEvents();
+    });
+
+    function editResume() {
+      alert('编辑简历功能开发中...');
+    }
+
+    function previewResume() {
+      alert('预览简历功能开发中...');
+    }
+
+    function bindEvents() {
+      document.getElementById('logoutBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        logout();
+        window.location.href = '../login.html?role=student';
+      });
+
+      document.getElementById('resumeFile').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          alert(`已选择文件: ${file.name}\n上传功能开发中...`);
+        }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>职位审核 - 管理员中心</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/icons.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="../index.html" class="navbar-brand">就业管理系统 - 管理员</a>
+      <div class="navbar-menu">
+        <span id="adminName"></span>
+        <a href="#" id="logoutBtn">退出登录</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="dashboard-container">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h2>管理中心</h2>
+      </div>
+      <div class="sidebar-menu">
+        <a href="dashboard.html" class="menu-item">
+          <span class="icon icon-dashboard"></span> 控制台
+        </a>
+        <a href="users.html" class="menu-item">
+          <span class="icon icon-users"></span> 用户管理
+        </a>
+        <a href="companies.html" class="menu-item">
+          <span class="icon icon-building"></span> 企业管理
+        </a>
+        <a href="jobs.html" class="menu-item active">
+          <span class="icon icon-briefcase"></span> 职位审核
+        </a>
+        <a href="statistics.html" class="menu-item">
+          <span class="icon icon-dashboard"></span> 数据统计
+        </a>
+        <a href="system.html" class="menu-item">
+          <span class="icon icon-settings"></span> 系统设置
+        </a>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h1>职位审核</h1>
+      </div>
+
+      <!-- 统计卡片 -->
+      <div class="stats-cards">
+        <div class="stat-card blue">
+          <h3>发布职位</h3>
+          <div class="value">238</div>
+        </div>
+        <div class="stat-card orange">
+          <h3>待审核</h3>
+          <div class="value">12</div>
+        </div>
+        <div class="stat-card green">
+          <h3>已通过</h3>
+          <div class="value">220</div>
+        </div>
+        <div class="stat-card purple">
+          <h3>被拒绝</h3>
+          <div class="value">6</div>
+        </div>
+      </div>
+
+      <!-- 待审核职位 -->
+      <div class="content-card">
+        <h2><span class="icon icon-bell"></span> 待审核职位</h2>
+        <div class="approval-list">
+          <div class="approval-card">
+            <div class="approval-header">
+              <div class="approval-title">Java开发工程师</div>
+              <span class="status-badge pending">待审核</span>
+            </div>
+            <div class="approval-meta">
+              腾讯科技 · 薪资：15-25K · 1小时前发布
+            </div>
+            <div class="approval-actions">
+              <button class="btn btn-sm btn-success" onclick="approveJob(1)">
+                <span class="icon icon-check"></span> 通过
+              </button>
+              <button class="btn btn-sm btn-danger" onclick="rejectJob(1)">
+                <span class="icon icon-close"></span> 拒绝
+              </button>
+              <button class="btn btn-sm btn-outline-secondary" onclick="viewJobDetail(1)">
+                <span class="icon icon-eye"></span> 查看详情
+              </button>
+            </div>
+          </div>
+
+          <div class="approval-card">
+            <div class="approval-header">
+              <div class="approval-title">前端开发工程师</div>
+              <span class="status-badge pending">待审核</span>
+            </div>
+            <div class="approval-meta">
+              阿里巴巴 · 薪资：18-30K · 2小时前发布
+            </div>
+            <div class="approval-actions">
+              <button class="btn btn-sm btn-success" onclick="approveJob(2)">
+                <span class="icon icon-check"></span> 通过
+              </button>
+              <button class="btn btn-sm btn-danger" onclick="rejectJob(2)">
+                <span class="icon icon-close"></span> 拒绝
+              </button>
+              <button class="btn btn-sm btn-outline-secondary" onclick="viewJobDetail(2)">
+                <span class="icon icon-eye"></span> 查看详情
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 所有职位 -->
+      <div class="content-card">
+        <h2><span class="icon icon-briefcase"></span> 所有职位</h2>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>职位名称</th>
+              <th>企业</th>
+              <th>薪资范围</th>
+              <th>工作地点</th>
+              <th>状态</th>
+              <th>发布时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Python开发工程师</td>
+              <td>字节跳动</td>
+              <td>20-35K</td>
+              <td>北京-海淀区</td>
+              <td><span class="status-badge approved">已通过</span></td>
+              <td>2024-12-01</td>
+              <td class="actions">
+                <button class="btn btn-sm btn-outline-primary" onclick="viewJobDetail(1)">
+                  <span class="icon icon-eye"></span> 查看
+                </button>
+                <button class="btn btn-sm btn-outline-danger" onclick="takedownJob(1)">
+                  <span class="icon icon-close"></span> 下架
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>UI设计师</td>
+              <td>华为</td>
+              <td>12-18K</td>
+              <td>深圳-南山区</td>
+              <td><span class="status-badge approved">已通过</span></td>
+              <td>2024-12-02</td>
+              <td class="actions">
+                <button class="btn btn-sm btn-outline-primary" onclick="viewJobDetail(2)">
+                  <span class="icon icon-eye"></span> 查看
+                </button>
+                <button class="btn btn-sm btn-outline-danger" onclick="takedownJob(2)">
+                  <span class="icon icon-close"></span> 下架
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 职位详情模态框 -->
+  <div class="modal" id="jobModal">
+    <div class="modal-content" style="max-width: 800px;">
+      <div class="modal-header">
+        <h3>职位详情</h3>
+        <span class="close" onclick="closeModal()">&times;</span>
+      </div>
+      <div class="modal-body" id="jobDetailContent"></div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = getCurrentUser();
+      const role = getUserRole();
+      if (!user || role !== 'admin') {
+        window.location.href = '../login.html?role=admin';
+        return;
+      }
+
+      document.getElementById('adminName').textContent = user.name || user.username || '管理员';
+      bindEvents();
+    });
+
+    function bindEvents() {
+      document.getElementById('logoutBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        logout();
+        window.location.href = '../login.html?role=admin';
+      });
+    }
+
+    function approveJob(id) {
+      if (confirm('确定要通过这个职位的审核吗？')) {
+        alert(`职位 ${id} 审核通过！`);
+        location.reload();
+      }
+    }
+
+    function rejectJob(id) {
+      const reason = prompt('请输入拒绝原因：');
+      if (reason) {
+        alert(`职位 ${id} 被拒绝。原因：${reason}`);
+        location.reload();
+      }
+    }
+
+    function viewJobDetail(id) {
+      document.getElementById('jobDetailContent').innerHTML = `
+        <div style="padding: 20px;">
+          <h2>Java开发工程师</h2>
+          <div style="margin: 20px 0;">
+            <h3>基本信息</h3>
+            <p><strong>企业:</strong> 腾讯科技</p>
+            <p><strong>薪资:</strong> 15-25K/月</p>
+            <p><strong>工作地点:</strong> 深圳-南山区</p>
+            <p><strong>工作经验:</strong> 3-5年</p>
+            <p><strong>学历要求:</strong> 本科及以上</p>
+            
+            <h3>职位描述</h3>
+            <p>负责公司核心业务系统的开发和维护，参与系统架构设计...</p>
+            
+            <h3>任职要求</h3>
+            <p>1. 3年以上Java开发经验<br>2. 熟悉Spring框架<br>3. 熟悉MySQL数据库</p>
+            
+            <h3>审核状态</h3>
+            <p><strong>状态:</strong> <span class="status-badge pending">待审核</span></p>
+            <p><strong>发布时间:</strong> 2024-12-05 10:30:00</p>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-success" onclick="approveJob(${id})">通过审核</button>
+            <button class="btn btn-danger" onclick="rejectJob(${id})">拒绝审核</button>
+            <button class="btn btn-outline-secondary" onclick="closeModal()">关闭</button>
+          </div>
+        </div>
+      `;
+      document.getElementById('jobModal').style.display = 'flex';
+    }
+
+    function takedownJob(id) {
+      if (confirm('确定要下架这个职位吗？')) {
+        alert(`职位 ${id} 已下架`);
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('jobModal').style.display = 'none';
+    }
+
+    window.addEventListener('click', (e) => {
+      if (e.target === document.getElementById('jobModal')) {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>

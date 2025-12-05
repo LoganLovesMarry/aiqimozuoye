@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的投递 - 学生中心</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/icons.css">
+  <link rel="stylesheet" href="../css/student.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="../index.html" class="navbar-brand">就业管理系统 - 学生</a>
+      <div class="navbar-menu">
+        <span id="studentName"></span>
+        <a href="#" id="logoutBtn">退出登录</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="dashboard-container">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h2>学生中心</h2>
+      </div>
+      <div class="sidebar-menu">
+        <a href="dashboard.html" class="menu-item">
+          <span class="icon icon-dashboard"></span> 控制台
+        </a>
+        <a href="jobs.html" class="menu-item">
+          <span class="icon icon-briefcase"></span> 浏览职位
+        </a>
+        <a href="applications.html" class="menu-item active">
+          <span class="icon icon-file"></span> 我的投递
+        </a>
+        <a href="resume.html" class="menu-item">
+          <span class="icon icon-document"></span> 我的简历
+        </a>
+        <a href="profile.html" class="menu-item">
+          <span class="icon icon-user"></span> 个人信息
+        </a>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h1>我的投递</h1>
+      </div>
+
+      <!-- 状态筛选 -->
+      <div class="search-bar">
+        <button class="filter-btn active" onclick="filterStatus('all')">全部 (5)</button>
+        <button class="filter-btn" onclick="filterStatus(0)">待查看 (1)</button>
+        <button class="filter-btn" onclick="filterStatus(1)">已查看 (2)</button>
+        <button class="filter-btn" onclick="filterStatus(2)">面试中 (1)</button>
+        <button class="filter-btn" onclick="filterStatus(3)">已录用 (0)</button>
+        <button class="filter-btn" onclick="filterStatus(4)">已拒绝 (1)</button>
+      </div>
+
+      <!-- 投递列表 -->
+      <div class="application-list" id="applicationList">
+        <!-- 投递记录将在这里动态生成 -->
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = getCurrentUser();
+      const role = getUserRole();
+      if (!user || role !== 'student') {
+        window.location.href = '../login.html?role=student';
+        return;
+      }
+
+      document.getElementById('studentName').textContent = user.name || user.email || '学生';
+      await loadApplications();
+      bindEvents();
+    });
+
+    async function loadApplications() {
+      // 模拟数据
+      const applications = [
+        {
+          id: 1,
+          jobTitle: 'Java开发工程师',
+          company: '腾讯科技',
+          salary: '15-25K',
+          location: '深圳-南山区',
+          status: 1, // 已查看
+          applyTime: '2025-12-04 10:30',
+          updateTime: '2025-12-04 15:20'
+        },
+        {
+          id: 2,
+          jobTitle: '前端开发工程师',
+          company: '阿里巴巴',
+          salary: '18-30K',
+          location: '杭州-余杭区',
+          status: 2, // 面试中
+          applyTime: '2025-12-03 14:20',
+          updateTime: '2025-12-04 09:10',
+          interviewTime: '2025-12-06 14:00'
+        },
+        {
+          id: 3,
+          jobTitle: 'Python开发工程师',
+          company: '字节跳动',
+          salary: '20-35K',
+          location: '北京-海淀区',
+          status: 0, // 待查看
+          applyTime: '2025-12-05 09:15',
+          updateTime: '2025-12-05 09:15'
+        },
+        {
+          id: 4,
+          jobTitle: 'UI/UX设计师',
+          company: '华为',
+          salary: '12-18K',
+          location: '深圳-龙岗区',
+          status: 1, // 已查看
+          applyTime: '2025-12-02 16:45',
+          updateTime: '2025-12-03 10:30'
+        },
+        {
+          id: 5,
+          jobTitle: '数据分析师',
+          company: '美团',
+          salary: '15-22K',
+          location: '北京-朝阳区',
+          status: 4, // 已拒绝
+          applyTime: '2025-12-01 11:20',
+          updateTime: '2025-12-03 08:40',
+          rejectReason: '暂不符合岗位要求'
+        }
+      ];
+
+      displayApplications(applications);
+    }
+
+    function displayApplications(applications) {
+      const container = document.getElementById('applicationList');
+      
+      if (applications.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="icon">📭</div>
+            <h3>暂无投递记录</h3>
+            <p>快去浏览心仪的职位吧！</p>
+            <button class="btn btn-primary" onclick="location.href='jobs.html'">
+              浏览职位
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = applications.map(app => `
+        <div class="application-item">
+          <div class="item-header">
+            <div class="job-title">${app.jobTitle}</div>
+            <span class="status-badge ${getStatusClass(app.status)}">
+              ${getStatusText(app.status)}
+            </span>
+          </div>
+          <div class="company">
+            <span class="icon icon-building"></span> ${app.company}
+          </div>
+          <div class="meta">
+            <span><span class="icon icon-money"></span> ${app.salary}</span>
+            <span><span class="icon icon-location"></span> ${app.location}</span>
+            <span><span class="icon icon-clock"></span> 投递于 ${app.applyTime}</span>
+          </div>
+          ${app.status === 2 && app.interviewTime ? `
+            <div style="padding: 10px; background: #e8f5e9; border-radius: 5px; margin-top: 10px;">
+              <strong style="color: #2e7d32;">📅 面试时间：${app.interviewTime}</strong>
+            </div>
+          ` : ''}
+          ${app.status === 4 && app.rejectReason ? `
+            <div style="padding: 10px; background: #ffebee; border-radius: 5px; margin-top: 10px;">
+              <strong style="color: #c62828;">拒绝原因：</strong> ${app.rejectReason}
+            </div>
+          ` : ''}
+          <div class="actions">
+            <button class="btn btn-sm btn-outline-primary" onclick="viewApplication(${app.id})">
+              <span class="icon icon-eye"></span> 查看详情
+            </button>
+            ${app.status === 0 || app.status === 1 ? `
+              <button class="btn btn-sm btn-outline-danger" onclick="cancelApplication(${app.id})">
+                <span class="icon icon-close"></span> 撤回投递
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function getStatusClass(status) {
+      const classes = {
+        0: 'pending',
+        1: 'viewed',
+        2: 'interview',
+        3: 'hired',
+        4: 'rejected'
+      };
+      return classes[status] || 'pending';
+    }
+
+    function getStatusText(status) {
+      const texts = {
+        0: '待查看',
+        1: '已查看',
+        2: '面试中',
+        3: '已录用',
+        4: '已拒绝'
+      };
+      return texts[status] || '未知';
+    }
+
+    function filterStatus(status) {
+      console.log('筛选状态:', status);
+      // 实际应该重新加载数据
+    }
+
+    function viewApplication(id) {
+      alert(`查看投递详情 ID: ${id}`);
+    }
+
+    function cancelApplication(id) {
+      if (confirm('确定要撤回这个投递吗？')) {
+        alert('撤回成功！');
+        // 实际应该调用API
+        location.reload();
+      }
+    }
+
+    function bindEvents() {
+      document.getElementById('logoutBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        logout();
+        window.location.href = '../login.html?role=student';
+      });
+    }
+  </script>
+</body>
+</html>

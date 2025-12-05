@@ -111,12 +111,12 @@ async function apiRequest(endpoint, options = {}) {
 const studentApi = {
   register: (data) => apiRequest('/student/register', {
     method: 'POST',
-    body: JSON.stringify(data)
+    body: data
   }),
   
   login: (email, password) => apiRequest('/student/login', {
     method: 'POST',
-    body: JSON.stringify({ email, password })
+    body: { email, password }
   }),
   
   getById: (id) => apiRequest(`/student/${id}`),
@@ -125,7 +125,7 @@ const studentApi = {
   
   update: (id, data) => apiRequest(`/student/${id}`, {
     method: 'PUT',
-    body: JSON.stringify(data)
+    body: data
   }),
   
   uploadResume: async (file) => {
@@ -356,12 +356,12 @@ const jobApi = {
   
   create: (data) => apiRequest('/job', {
     method: 'POST',
-    body: JSON.stringify(data)
+    body: data
   }),
   
   update: (id, data) => apiRequest(`/job/${id}`, {
     method: 'PUT',
-    body: JSON.stringify(data)
+    body: data
   }),
   
   close: (id) => apiRequest(`/job/${id}/close`, { method: 'PUT' }),
@@ -375,7 +375,7 @@ const jobApi = {
 const applicationApi = {
   apply: (studentId, jobId) => apiRequest('/application', {
     method: 'POST',
-    body: JSON.stringify({ studentId, jobId })
+    body: { studentId, jobId }
   }),
   
   getById: (id) => apiRequest(`/application/${id}`),
@@ -386,7 +386,7 @@ const applicationApi = {
   
   updateStatus: (id, status) => apiRequest(`/application/${id}/status`, {
     method: 'PUT',
-    body: JSON.stringify({ status })
+    body: { status }
   }),
   
   view: (id) => apiRequest(`/application/${id}/view`, { method: 'PUT' }),
@@ -408,12 +408,12 @@ const announcementApi = {
   
   create: (data) => apiRequest('/announcement', {
     method: 'POST',
-    body: JSON.stringify(data)
+    body: data
   }),
   
   update: (id, data) => apiRequest(`/announcement/${id}`, {
     method: 'PUT',
-    body: JSON.stringify(data)
+    body: data
   }),
   
   hide: (id) => apiRequest(`/announcement/${id}/hide`, { method: 'PUT' }),
