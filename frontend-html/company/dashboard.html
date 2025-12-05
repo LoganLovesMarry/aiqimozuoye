@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>企业中心 - 就业管理系统</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/icons.css">
+  <link rel="stylesheet" href="../css/company.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="../index.html" class="navbar-brand">就业管理系统</a>
+      <div class="navbar-menu">
+        <span id="companyName" style="margin-right: 15px;"></span>
+        <a href="#" id="logoutBtn">退出登录</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="dashboard-container">
+    <!-- 侧边栏 -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h2>企业中心</h2>
+      </div>
+      <div class="sidebar-menu">
+        <a href="dashboard.html" class="menu-item active">
+          <span class="icon icon-dashboard"></span> 控制台
+        </a>
+        <a href="jobs.html" class="menu-item">
+          <span class="icon icon-briefcase"></span> 职位管理
+        </a>
+        <a href="applications.html" class="menu-item">
+          <span class="icon icon-file"></span> 应聘管理
+        </a>
+        <a href="profile.html" class="menu-item">
+          <span class="icon icon-user"></span> 企业信息
+        </a>
+      </div>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+      <div class="page-header">
+        <h1>企业控制台</h1>
+        <button class="btn btn-primary" id="postJobBtn">
+          <span class="icon icon-plus"></span> 发布新职位
+        </button>
+      </div>
+
+      <!-- 数据统计 -->
+      <div class="stats-cards">
+        <div class="stat-card">
+          <h3>发布中的职位</h3>
+          <div class="value" id="activeJobs">0</div>
+        </div>
+        <div class="stat-card">
+          <h3>待处理申请</h3>
+          <div class="value" id="pendingApplications">0</div>
+        </div>
+        <div class="stat-card">
+          <h3>已安排面试</h3>
+          <div class="value" id="scheduledInterviews">0</div>
+        </div>
+        <div class="stat-card">
+          <h3>已录用</h3>
+          <div class="value" id="hiredCount">0</div>
+        </div>
+      </div>
+
+      <!-- 最近活动 -->
+      <div class="content-card">
+        <h2>最近动态</h2>
+        <div id="recentActivities">
+          <!-- 动态内容将通过JavaScript动态生成 -->
+          <div class="activity-item">
+            <div class="activity-icon">
+              <span class="icon icon-bell"></span>
+            </div>
+            <div class="activity-content">
+              <div>欢迎使用企业中心</div>
+              <div class="activity-time">刚刚</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 发布职位模态框 -->
+  <div class="modal" id="postJobModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>发布新职位</h3>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+        <form id="postJobForm">
+          <div class="form-group">
+            <label>职位名称</label>
+            <input type="text" class="form-control" name="title" required>
+          </div>
+          <div class="form-group">
+            <label>职位类型</label>
+            <select class="form-control" name="type" required>
+              <option value="">请选择职位类型</option>
+              <option value="fulltime">全职</option>
+              <option value="parttime">兼职</option>
+              <option value="internship">实习</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>薪资范围</label>
+            <div class="row">
+              <div class="col">
+                <input type="number" class="form-control" name="salaryMin" placeholder="最低(千/月)" required>
+              </div>
+              <div class="col">
+                <input type="number" class="form-control" name="salaryMax" placeholder="最高(千/月)" required>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>职位描述</label>
+            <textarea class="form-control" name="description" rows="5" required></textarea>
+          </div>
+          <div class="form-group">
+            <label>职位要求</label>
+            <textarea class="form-control" name="requirements" rows="5" required></textarea>
+          </div>
+          <div class="form-group">
+            <label>工作地点</label>
+            <input type="text" class="form-control" name="location" required>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">发布职位</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    // 检查登录状态
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 检查是否已登录
+      const user = getCurrentUser();
+      const role = getUserRole();
+      if (!user || role !== 'company') {
+        window.location.href = '../login.html?role=company';
+        return;
+      }
+
+      // 显示企业名称
+      document.getElementById('companyName').textContent = user.name || user.username;
+
+      // 加载企业数据
+      await loadCompanyData();
+      
+      // 绑定事件
+      bindEvents();
+    });
+
+    // 加载企业数据
+    async function loadCompanyData() {
+      try {
+        // 这里应该调用API获取企业数据
+        // const data = await companyApi.getDashboardData();
+        // 更新UI
+        // document.getElementById('activeJobs').textContent = data.activeJobs || 0;
+        // document.getElementById('pendingApplications').textContent = data.pendingApplications || 0;
+        // document.getElementById('scheduledInterviews').textContent = data.scheduledInterviews || 0;
+        // document.getElementById('hiredCount').textContent = data.hiredCount || 0;
+      } catch (error) {
+        console.error('加载数据失败:', error);
+        alert('加载数据失败，请刷新重试');
+      }
+    }
+
+    // 绑定事件
+    function bindEvents() {
+      // 登出
+      document.getElementById('logoutBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        logout();
+        window.location.href = '../login.html?role=company';
+      });
+
+      // 发布职位按钮
+      document.getElementById('postJobBtn').addEventListener('click', () => {
+        document.getElementById('postJobModal').style.display = 'flex';
+      });
+
+      // 关闭模态框
+      document.querySelector('.close').addEventListener('click', () => {
+        document.getElementById('postJobModal').style.display = 'none';
+      });
+
+      // 点击模态框外部关闭
+      window.addEventListener('click', (e) => {
+        if (e.target === document.getElementById('postJobModal')) {
+          document.getElementById('postJobModal').style.display = 'none';
+        }
+      });
+
+      // 提交发布职位表单
+      document.getElementById('postJobForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const jobData = {
+          title: formData.get('title'),
+          type: formData.get('type'),
+          salaryMin: formData.get('salaryMin'),
+          salaryMax: formData.get('salaryMax'),
+          description: formData.get('description'),
+          requirements: formData.get('requirements'),
+          location: formData.get('location')
+        };
+
+        try {
+          // 这里应该调用API发布职位
+          // const result = await companyApi.postJob(jobData);
+          // if (result.code === 200) {
+          //   alert('职位发布成功');
+          //   document.getElementById('postJobModal').style.display = 'none';
+          //   e.target.reset();
+          //   await loadCompanyData(); // 刷新数据
+          // } else {
+          //   throw new Error(result.message || '发布失败');
+          // }
+          alert('职位发布功能开发中...');
+        } catch (error) {
+          console.error('发布职位失败:', error);
+          alert('发布职位失败: ' + error.message);
+        }
+      });
+    }
+  </script>
+</body>
+</html>

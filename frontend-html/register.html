@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>注册 - 就业管理系统</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-box">
+      <h2>用户注册</h2>
+      
+      <!-- 角色选择 -->
+      <div class="flex gap-2 mb-2">
+        <button class="btn btn-primary" id="studentBtn" style="flex: 1;">学生注册</button>
+        <button class="btn btn-secondary" id="companyBtn" style="flex: 1;">企业注册</button>
+      </div>
+
+      <form id="registerForm">
+        <div class="form-group">
+          <label class="form-label" id="nameLabel">姓名</label>
+          <input type="text" id="name" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">邮箱</label>
+          <input type="email" id="email" class="form-control" required>
+        </div>
+
+        <div class="form-group" id="majorGroup">
+          <label class="form-label">专业</label>
+          <input type="text" id="major" class="form-control" required>
+        </div>
+
+        <div class="form-group hidden" id="licenseGroup">
+          <label class="form-label">营业执照号</label>
+          <input type="text" id="license" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">密码</label>
+          <input type="password" id="password" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">确认密码</label>
+          <input type="password" id="confirmPassword" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">
+          注册
+        </button>
+      </form>
+
+      <div class="text-center mt-2">
+        已有账号？
+        <a href="login.html">立即登录</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    let currentRole = 'student';
+
+    const studentBtn = document.getElementById('studentBtn');
+    const companyBtn = document.getElementById('companyBtn');
+    const nameLabel = document.getElementById('nameLabel');
+    const majorGroup = document.getElementById('majorGroup');
+    const licenseGroup = document.getElementById('licenseGroup');
+
+    // 切换到学生注册
+    studentBtn.addEventListener('click', () => {
+      currentRole = 'student';
+      studentBtn.className = 'btn btn-primary';
+      companyBtn.className = 'btn btn-secondary';
+      nameLabel.textContent = '姓名';
+      majorGroup.classList.remove('hidden');
+      licenseGroup.classList.add('hidden');
+      document.getElementById('major').required = true;
+      document.getElementById('license').required = false;
+    });
+
+    // 切换到企业注册
+    companyBtn.addEventListener('click', () => {
+      currentRole = 'company';
+      studentBtn.className = 'btn btn-secondary';
+      companyBtn.className = 'btn btn-primary';
+      nameLabel.textContent = '企业名称';
+      majorGroup.classList.add('hidden');
+      licenseGroup.classList.remove('hidden');
+      document.getElementById('major').required = false;
+      document.getElementById('license').required = true;
+    });
+
+    // 注册表单提交
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if (password !== confirmPassword) {
+        alert('两次密码输入不一致');
+        return;
+      }
+
+      const data = { name, email, password };
+
+      if (currentRole === 'student') {
+        data.major = document.getElementById('major').value;
+      } else {
+        data.license = document.getElementById('license').value;
+      }
+
+      try {
+        let result;
+        
+        if (currentRole === 'student') {
+          result = await studentApi.register(data);
+        } else {
+          result = await companyApi.register(data);
+        }
+
+        if (result.code === 200) {
+          if (currentRole === 'company') {
+            alert('注册成功！请等待管理员审核');
+          } else {
+            alert('注册成功！请登录');
+          }
+          window.location.href = `login.html?role=${currentRole}`;
+        } else {
+          alert(result.message || '注册失败');
+        }
+      } catch (error) {
+        console.error('注册失败:', error);
+        alert('注册失败，请检查网络连接');
+      }
+    });
+  </script>
+</body>
+</html>

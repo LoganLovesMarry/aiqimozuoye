@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>职位管理 - 企业中心</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/icons.css">
+  <link rel="stylesheet" href="../css/company.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="../index.html" class="navbar-brand">就业管理系统</a>
+      <div class="navbar-menu">
+        <span id="companyName"></span>
+        <a href="#" id="logoutBtn">退出登录</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="dashboard-container">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h2>企业中心</h2>
+      </div>
+      <div class="sidebar-menu">
+        <a href="dashboard.html" class="menu-item">
+          <span class="icon icon-dashboard"></span> 控制台
+        </a>
+        <a href="jobs.html" class="menu-item active">
+          <span class="icon icon-briefcase"></span> 职位管理
+        </a>
+        <a href="applications.html" class="menu-item">
+          <span class="icon icon-file"></span> 应聘管理
+        </a>
+        <a href="profile.html" class="menu-item">
+          <span class="icon icon-user"></span> 企业信息
+        </a>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h1>职位管理</h1>
+        <button class="btn btn-primary" id="postJobBtn">
+          <span class="icon icon-plus"></span> 发布新职位
+        </button>
+      </div>
+
+      <div class="content-card">
+        <h2>我发布的职位</h2>
+        <div id="jobsList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 发布/编辑职位模态框 -->
+  <div class="modal" id="jobModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">发布新职位</h3>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+        <form id="jobForm">
+          <input type="hidden" id="jobId">
+          <div class="form-group">
+            <label>职位名称 *</label>
+            <input type="text" class="form-control" id="title" required placeholder="如：Java开发工程师">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>职位类型 *</label>
+              <select class="form-control" id="type" required>
+                <option value="">请选择</option>
+                <option value="全职">全职</option>
+                <option value="兼职">兼职</option>
+                <option value="实习">实习</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>工作地点 *</label>
+              <input type="text" class="form-control" id="location" required placeholder="如：北京-海淀区">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>最低薪资 (千元/月) *</label>
+              <input type="number" class="form-control" id="salaryMin" required placeholder="如：10">
+            </div>
+            <div class="form-group">
+              <label>最高薪资 (千元/月) *</label>
+              <input type="number" class="form-control" id="salaryMax" required placeholder="如：15">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>职位描述 *</label>
+            <textarea class="form-control" id="description" rows="5" required placeholder="请详细描述职位职责和工作内容"></textarea>
+          </div>
+          <div class="form-group">
+            <label>任职要求 *</label>
+            <textarea class="form-control" id="requirements" rows="5" required placeholder="请列出任职要求，如学历、经验、技能等"></textarea>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary" id="submitBtn">
+              <span class="icon icon-check"></span> 发布职位
+            </button>
+            <button type="button" class="btn btn-outline-secondary" onclick="closeModal()">取消</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    let currentEditingJobId = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = getCurrentUser();
+      const role = getUserRole();
+      if (!user || role !== 'company') {
+        window.location.href = '../login.html?role=company';
+        return;
+      }
+
+      document.getElementById('companyName').textContent = user.name || user.companyName || '企业用户';
+      await loadJobs();
+      bindEvents();
+    });
+
+    async function loadJobs() {
+      const jobsList = document.getElementById('jobsList');
+      
+      try {
+        const jobs = [
+          {
+            id: 1,
+            title: 'Java开发工程师',
+            type: '全职',
+            location: '北京-海淀区',
+            salaryMin: 10,
+            salaryMax: 15,
+            description: '负责公司核心业务系统的开发和维护',
+            requirements: '3年以上Java开发经验，熟悉Spring框架',
+            status: 'active',
+            applicantCount: 5,
+            createdAt: '2024-12-01'
+          },
+          {
+            id: 2,
+            title: '前端开发工程师',
+            type: '全职',
+            location: '上海-浦东新区',
+            salaryMin: 12,
+            salaryMax: 18,
+            description: '负责公司Web前端开发',
+            requirements: '熟悉Vue.js或React',
+            status: 'active',
+            applicantCount: 8,
+            createdAt: '2024-12-02'
+          }
+        ];
+
+        if (jobs.length === 0) {
+          jobsList.innerHTML = `
+            <div class="empty-state">
+              <div class="icon icon-4x icon-briefcase"></div>
+              <h3>还没有发布任何职位</h3>
+              <p>点击上方"发布新职位"按钮开始招聘吧！</p>
+            </div>
+          `;
+          return;
+        }
+
+        jobsList.innerHTML = jobs.map(job => `
+          <div class="job-card">
+            <div class="job-header">
+              <h3 class="job-title">${job.title}</h3>
+              <span class="job-status ${job.status}">${job.status === 'active' ? '招聘中' : '已关闭'}</span>
+            </div>
+            <div class="job-info">
+              <span><span class="icon icon-location"></span> ${job.location}</span>
+              <span><span class="icon icon-briefcase"></span> ${job.type}</span>
+              <span><span class="icon icon-money"></span> ${job.salaryMin}-${job.salaryMax}K/月</span>
+              <span><span class="icon icon-users"></span> ${job.applicantCount} 人申请</span>
+            </div>
+            <div class="job-actions">
+              <button class="btn btn-sm btn-outline-primary" onclick="viewJob(${job.id})">
+                <span class="icon icon-eye"></span> 查看
+              </button>
+              <button class="btn btn-sm btn-outline-secondary" onclick="editJob(${job.id})">
+                <span class="icon icon-edit"></span> 编辑
+              </button>
+              <button class="btn btn-sm btn-outline-${job.status === 'active' ? 'warning' : 'success'}" 
+                      onclick="toggleJobStatus(${job.id}, '${job.status}')">
+                <span class="icon icon-${job.status === 'active' ? 'pause' : 'play'}"></span> 
+                ${job.status === 'active' ? '暂停招聘' : '继续招聘'}
+              </button>
+              <button class="btn btn-sm btn-outline-danger" onclick="deleteJob(${job.id})">
+                <span class="icon icon-delete"></span> 删除
+              </button>
+            </div>
+          </div>
+        `).join('');
+      } catch (error) {
+        console.error('加载职位失败:', error);
+        jobsList.innerHTML = `
+          <div class="empty-state">
+            <div class="icon icon-4x icon-warning"></div>
+            <h3>加载失败</h3>
+            <p>${error.message}</p>
+          </div>
+        `;
+      }
+    }
+
+    function bindEvents() {
+      document.getElementById('logoutBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        logout();
+        window.location.href = '../login.html?role=company';
+      });
+
+      document.getElementById('postJobBtn').addEventListener('click', () => {
+        currentEditingJobId = null;
+        document.getElementById('modalTitle').textContent = '发布新职位';
+        document.getElementById('submitBtn').innerHTML = '<span class="icon icon-check"></span> 发布职位';
+        document.getElementById('jobForm').reset();
+        document.getElementById('jobModal').style.display = 'flex';
+      });
+
+      document.querySelector('.close').addEventListener('click', closeModal);
+      window.addEventListener('click', (e) => {
+        if (e.target === document.getElementById('jobModal')) {
+          closeModal();
+        }
+      });
+
+      document.getElementById('jobForm').addEventListener('submit', handleSubmit);
+    }
+
+    function closeModal() {
+      document.getElementById('jobModal').style.display = 'none';
+    }
+
+    async function handleSubmit(e) {
+      e.preventDefault();
+      
+      const jobData = {
+        title: document.getElementById('title').value,
+        type: document.getElementById('type').value,
+        location: document.getElementById('location').value,
+        salaryMin: document.getElementById('salaryMin').value,
+        salaryMax: document.getElementById('salaryMax').value,
+        description: document.getElementById('description').value,
+        requirements: document.getElementById('requirements').value
+      };
+
+      try {
+        alert(currentEditingJobId ? '职位更新成功！' : '职位发布成功！');
+        closeModal();
+        await loadJobs();
+      } catch (error) {
+        console.error('操作失败:', error);
+        alert('操作失败: ' + error.message);
+      }
+    }
+
+    function viewJob(id) {
+      alert(`查看职位详情 ID: ${id}`);
+    }
+
+    function editJob(id) {
+      currentEditingJobId = id;
+      document.getElementById('modalTitle').textContent = '编辑职位';
+      document.getElementById('submitBtn').innerHTML = '<span class="icon icon-save"></span> 保存修改';
+      document.getElementById('jobModal').style.display = 'flex';
+      alert('编辑功能开发中...');
+    }
+
+    function toggleJobStatus(id, currentStatus) {
+      const newStatus = currentStatus === 'active' ? 'closed' : 'active';
+      const action = newStatus === 'active' ? '继续招聘' : '暂停招聘';
+      
+      if (confirm(`确定要${action}吗？`)) {
+        alert(`${action}成功！`);
+        loadJobs();
+      }
+    }
+
+    function deleteJob(id) {
+      if (confirm('确定要删除这个职位吗？此操作不可恢复！')) {
+        alert('删除成功！');
+        loadJobs();
+      }
+    }
+  </script>
+</body>
+</html>

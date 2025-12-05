@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>毕业生就业信息管理系统</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- 导航栏 -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="navbar-brand">就业管理系统</a>
+      <div class="navbar-menu">
+        <a href="login.html">登录</a>
+        <a href="register.html" class="btn-primary">注册</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 首页横幅 -->
+  <div class="hero">
+    <div class="container">
+      <h1>欢迎使用毕业生就业信息管理系统</h1>
+      <p>连接学生与企业，助力就业梦想</p>
+    </div>
+  </div>
+
+  <!-- 功能特色 -->
+  <div class="container">
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon">👨‍🎓</div>
+        <h3>学生入口</h3>
+        <p>浏览职位，投递简历，管理求职进度</p>
+        <a href="login.html?role=student" class="btn btn-primary mt-2">进入</a>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🏢</div>
+        <h3>企业入口</h3>
+        <p>发布职位，筛选简历，招聘优秀人才</p>
+        <a href="login.html?role=company" class="btn btn-primary mt-2">进入</a>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3>管理员入口</h3>
+        <p>系统管理，数据统计，审核监督</p>
+        <a href="login.html?role=admin" class="btn btn-primary mt-2">进入</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

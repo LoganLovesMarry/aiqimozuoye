@@ -44,6 +44,17 @@ public class AdminController {
         return Result.success(admins);
     }
     
+    @PostMapping("/register")
+    public Result<Admin> register(@RequestBody Admin admin) {
+        try {
+            Admin created = adminService.create(admin);
+            created.setPassword(null);
+            return Result.success(created);
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
+    }
+    
     @PostMapping
     public Result<Admin> create(@RequestBody Admin admin) {
         try {

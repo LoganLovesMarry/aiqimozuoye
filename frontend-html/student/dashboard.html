@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>学生仪表板 - 就业管理系统</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="../index.html" class="navbar-brand">就业管理系统</a>
+      <div class="navbar-menu">
+        <span>欢迎，<span class="user-name"></span></span>
+        <button onclick="logout()" class="btn btn-danger">退出</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html" class="active">仪表板</a></li>
+        <li><a href="jobs.html">职位列表</a></li>
+        <li><a href="applications.html">我的投递</a></li>
+        <li><a href="profile.html">个人信息</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <h1>欢迎回来！</h1>
+      <p class="mb-3">这是您的求职概览</p>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">投递中</div>
+          <div class="stat-value" id="pendingCount">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">面试中</div>
+          <div class="stat-value" id="interviewCount">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">已录用</div>
+          <div class="stat-value" id="hiredCount">0</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">最近投递</h3>
+        </div>
+        <div id="recentApplications">
+          <div class="loading">加载中...</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">系统公告</h3>
+        </div>
+        <div id="announcements">
+          <div class="loading">加载中...</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    // 检查登录和角色
+    if (!initPage('student')) {
+      throw new Error('未授权访问');
+    }
+
+    const user = getUser();
+
+    // 加载数据
+    async function loadData() {
+      try {
+        const [appsRes, announcementsRes] = await Promise.all([
+          applicationApi.getByStudentId(user.id),
+          announcementApi.getActive()
+        ]);
+
+        if (appsRes.code === 200) {
+          const apps = appsRes.data;
+          
+          // 更新统计
+          document.getElementById('pendingCount').textContent = 
+            apps.filter(a => a.status === 0 || a.status === 1).length;
+          document.getElementById('interviewCount').textContent = 
+            apps.filter(a => a.status === 2).length;
+          document.getElementById('hiredCount').textContent = 
+            apps.filter(a => a.status === 3).length;
+
+          // 显示最近投递
+          const recentDiv = document.getElementById('recentApplications');
+          if (apps.length === 0) {
+            recentDiv.innerHTML = '<div class="empty-state">暂无投递记录</div>';
+          } else {
+            recentDiv.innerHTML = apps.slice(0, 5).map(app => `
+              <div style="padding: 1rem; border-bottom: 1px solid #e5e7eb;">
+                <div style="display: flex; justify-content: space-between;">
+                  <div>
+                    <strong>${app.jobTitle}</strong>
+                    <div style="color: #6b7280; font-size: 0.875rem;">${app.companyName}</div>
+                  </div>
+                  <span class="badge ${
+                    app.status === 3 ? 'badge-success' :
+                    app.status === 2 ? 'badge-warning' :
+                    app.status === 4 ? 'badge-danger' : 'badge-info'
+                  }">${ApplicationStatus[app.status]}</span>
+                </div>
+              </div>
+            `).join('');
+          }
+        }
+
+        if (announcementsRes.code === 200) {
+          const announcements = announcementsRes.data;
+          const announcementsDiv = document.getElementById('announcements');
+          
+          if (announcements.length === 0) {
+            announcementsDiv.innerHTML = '<div class="empty-state">暂无公告</div>';
+          } else {
+            announcementsDiv.innerHTML = announcements.slice(0, 5).map(item => `
+              <div style="padding: 1rem; border-bottom: 1px solid #e5e7eb;">
+                <strong>${item.title}</strong>
+                <p style="color: #6b7280; margin-top: 0.5rem;">${item.content}</p>
+              </div>
+            `).join('');
+          }
+        }
+      } catch (error) {
+        console.error('加载数据失败:', error);
+      }
+    }
+
+    loadData();
+  </script>
+</body>
+</html>

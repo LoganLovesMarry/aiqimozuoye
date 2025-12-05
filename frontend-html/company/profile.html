@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>企业信息 - 企业中心</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/icons.css">
+  <link rel="stylesheet" href="../css/company.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="../index.html" class="navbar-brand">就业管理系统</a>
+      <div class="navbar-menu">
+        <span id="companyName"></span>
+        <a href="#" id="logoutBtn">退出登录</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="dashboard-container">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h2>企业中心</h2>
+      </div>
+      <div class="sidebar-menu">
+        <a href="dashboard.html" class="menu-item">
+          <span class="icon icon-dashboard"></span> 控制台
+        </a>
+        <a href="jobs.html" class="menu-item">
+          <span class="icon icon-briefcase"></span> 职位管理
+        </a>
+        <a href="applications.html" class="menu-item">
+          <span class="icon icon-file"></span> 应聘管理
+        </a>
+        <a href="profile.html" class="menu-item active">
+          <span class="icon icon-user"></span> 企业信息
+        </a>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h1>企业信息</h1>
+        <button class="btn btn-primary" id="editBtn">
+          <span class="icon icon-edit"></span> 编辑信息
+        </button>
+      </div>
+
+      <!-- 查看模式 -->
+      <div id="viewMode">
+        <div class="content-card">
+          <div class="profile-section">
+            <h3>基本信息</h3>
+            <div class="info-item">
+              <div class="info-label">企业名称</div>
+              <div class="info-value" id="viewCompanyName">示例科技有限公司</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">统一社会信用代码</div>
+              <div class="info-value" id="viewCreditCode">91110000XXXXXXXXXX</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">企业类型</div>
+              <div class="info-value" id="viewCompanyType">互联网/软件开发</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">企业规模</div>
+              <div class="info-value" id="viewCompanySize">100-499人</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">成立时间</div>
+              <div class="info-value" id="viewFoundedDate">2015-06-01</div>
+            </div>
+          </div>
+
+          <div class="profile-section">
+            <h3>联系信息</h3>
+            <div class="info-item">
+              <div class="info-label">联系人</div>
+              <div class="info-value" id="viewContact">张经理</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">联系电话</div>
+              <div class="info-value" id="viewPhone">010-12345678</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">企业邮箱</div>
+              <div class="info-value" id="viewEmail">hr@example.com</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">企业地址</div>
+              <div class="info-value" id="viewAddress">北京市海淀区中关村大街1号</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">企业网站</div>
+              <div class="info-value" id="viewWebsite">https://www.example.com</div>
+            </div>
+          </div>
+
+          <div class="profile-section">
+            <h3>企业简介</h3>
+            <div class="info-item">
+              <div class="info-value" id="viewDescription" style="width: 100%;">
+                我们是一家专注于互联网技术开发的创新型企业，致力于为客户提供优质的软件解决方案。
+                公司拥有一支经验丰富的技术团队，在人工智能、大数据、云计算等领域有深入的研究和实践。
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 编辑模式 -->
+      <div id="editMode" style="display: none;">
+        <div class="content-card">
+          <form id="profileForm">
+            <div class="profile-section">
+              <h3>基本信息</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>企业名称 *</label>
+                  <input type="text" class="form-control" id="companyNameInput" required>
+                </div>
+                <div class="form-group">
+                  <label>统一社会信用代码 *</label>
+                  <input type="text" class="form-control" id="creditCodeInput" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>企业类型 *</label>
+                  <select class="form-control" id="companyTypeInput" required>
+                    <option value="">请选择</option>
+                    <option value="互联网/软件开发">互联网/软件开发</option>
+                    <option value="金融">金融</option>
+                    <option value="制造业">制造业</option>
+                    <option value="贸易/零售">贸易/零售</option>
+                    <option value="教育/培训">教育/培训</option>
+                    <option value="其他">其他</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>企业规模 *</label>
+                  <select class="form-control" id="companySizeInput" required>
+                    <option value="">请选择</option>
+                    <option value="20人以下">20人以下</option>
+                    <option value="20-99人">20-99人</option>
+                    <option value="100-499人">100-499人</option>
+                    <option value="500-999人">500-999人</option>
+                    <option value="1000人以上">1000人以上</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>成立时间 *</label>
+                <input type="date" class="form-control" id="foundedDateInput" required>
+              </div>
+            </div>
+
+            <div class="profile-section">
+              <h3>联系信息</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>联系人 *</label>
+                  <input type="text" class="form-control" id="contactInput" required>
+                </div>
+                <div class="form-group">
+                  <label>联系电话 *</label>
+                  <input type="tel" class="form-control" id="phoneInput" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>企业邮箱 *</label>
+                  <input type="email" class="form-control" id="emailInput" required>
+                </div>
+                <div class="form-group">
+                  <label>企业网站</label>
+                  <input type="url" class="form-control" id="websiteInput" placeholder="https://">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>企业地址 *</label>
+                <input type="text" class="form-control" id="addressInput" required>
+              </div>
+            </div>
+
+            <div class="profile-section">
+              <h3>企业简介</h3>
+              <div class="form-group">
+                <label>企业简介 *</label>
+                <textarea class="form-control" id="descriptionInput" rows="6" required
+                          placeholder="请详细介绍您的企业，包括主营业务、企业文化、发展历程等"></textarea>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary">
+                <span class="icon icon-save"></span> 保存修改
+              </button>
+              <button type="button" class="btn btn-outline-secondary" id="cancelBtn">取消</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- 修改密码 -->
+      <div class="content-card">
+        <h2>修改密码</h2>
+        <form id="passwordForm" style="max-width: 500px;">
+          <div class="form-group">
+            <label>当前密码 *</label>
+            <input type="password" class="form-control" id="oldPassword" required>
+          </div>
+          <div class="form-group">
+            <label>新密码 *</label>
+            <input type="password" class="form-control" id="newPassword" required minlength="6">
+          </div>
+          <div class="form-group">
+            <label>确认新密码 *</label>
+            <input type="password" class="form-control" id="confirmPassword" required minlength="6">
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">
+              <span class="icon icon-check"></span> 修改密码
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = getCurrentUser();
+      const role = getUserRole();
+      if (!user || role !== 'company') {
+        window.location.href = '../login.html?role=company';
+        return;
+      }
+
+      document.getElementById('companyName').textContent = user.name || user.companyName || '企业用户';
+      await loadProfile();
+      bindEvents();
+    });
+
+    async function loadProfile() {
+      try {
+        // 这里应该从API加载企业信息
+        // const profile = await companyApi.getProfile();
+        // 填充到页面...
+      } catch (error) {
+        console.error('加载企业信息失败:', error);
+        alert('加载失败: ' + error.message);
+      }
+    }
+
+    function bindEvents() {
+      document.getElementById('logoutBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        logout();
+        window.location.href = '../login.html?role=company';
+      });
+
+      // 编辑按钮
+      document.getElementById('editBtn').addEventListener('click', () => {
+        // 填充表单数据
+        document.getElementById('companyNameInput').value = document.getElementById('viewCompanyName').textContent;
+        document.getElementById('creditCodeInput').value = document.getElementById('viewCreditCode').textContent;
+        document.getElementById('companyTypeInput').value = document.getElementById('viewCompanyType').textContent;
+        document.getElementById('companySizeInput').value = document.getElementById('viewCompanySize').textContent;
+        document.getElementById('foundedDateInput').value = document.getElementById('viewFoundedDate').textContent;
+        document.getElementById('contactInput').value = document.getElementById('viewContact').textContent;
+        document.getElementById('phoneInput').value = document.getElementById('viewPhone').textContent;
+        document.getElementById('emailInput').value = document.getElementById('viewEmail').textContent;
+        document.getElementById('addressInput').value = document.getElementById('viewAddress').textContent;
+        document.getElementById('websiteInput').value = document.getElementById('viewWebsite').textContent;
+        document.getElementById('descriptionInput').value = document.getElementById('viewDescription').textContent.trim();
+
+        // 切换模式
+        document.getElementById('viewMode').style.display = 'none';
+        document.getElementById('editMode').style.display = 'block';
+        document.getElementById('editBtn').style.display = 'none';
+      });
+
+      // 取消编辑
+      document.getElementById('cancelBtn').addEventListener('click', () => {
+        document.getElementById('viewMode').style.display = 'block';
+        document.getElementById('editMode').style.display = 'none';
+        document.getElementById('editBtn').style.display = 'inline-flex';
+      });
+
+      // 保存企业信息
+      document.getElementById('profileForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const profileData = {
+          companyName: document.getElementById('companyNameInput').value,
+          creditCode: document.getElementById('creditCodeInput').value,
+          companyType: document.getElementById('companyTypeInput').value,
+          companySize: document.getElementById('companySizeInput').value,
+          foundedDate: document.getElementById('foundedDateInput').value,
+          contact: document.getElementById('contactInput').value,
+          phone: document.getElementById('phoneInput').value,
+          email: document.getElementById('emailInput').value,
+          address: document.getElementById('addressInput').value,
+          website: document.getElementById('websiteInput').value,
+          description: document.getElementById('descriptionInput').value
+        };
+
+        try {
+          // await companyApi.updateProfile(profileData);
+          
+          // 更新显示
+          document.getElementById('viewCompanyName').textContent = profileData.companyName;
+          document.getElementById('viewCreditCode').textContent = profileData.creditCode;
+          document.getElementById('viewCompanyType').textContent = profileData.companyType;
+          document.getElementById('viewCompanySize').textContent = profileData.companySize;
+          document.getElementById('viewFoundedDate').textContent = profileData.foundedDate;
+          document.getElementById('viewContact').textContent = profileData.contact;
+          document.getElementById('viewPhone').textContent = profileData.phone;
+          document.getElementById('viewEmail').textContent = profileData.email;
+          document.getElementById('viewAddress').textContent = profileData.address;
+          document.getElementById('viewWebsite').textContent = profileData.website;
+          document.getElementById('viewDescription').textContent = profileData.description;
+
+          alert('企业信息保存成功！');
+          document.getElementById('viewMode').style.display = 'block';
+          document.getElementById('editMode').style.display = 'none';
+          document.getElementById('editBtn').style.display = 'inline-flex';
+        } catch (error) {
+          console.error('保存失败:', error);
+          alert('保存失败: ' + error.message);
+        }
+      });
+
+      // 修改密码
+      document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const oldPassword = document.getElementById('oldPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (newPassword !== confirmPassword) {
+          alert('两次输入的密码不一致！');
+          return;
+        }
+
+        try {
+          // await companyApi.changePassword(oldPassword, newPassword);
+          alert('密码修改成功！请重新登录。');
+          logout();
+          window.location.href = '../login.html?role=company';
+        } catch (error) {
+          console.error('修改密码失败:', error);
+          alert('修改密码失败: ' + error.message);
+        }
+      });
+    }
+  </script>
+</body>
+</html>

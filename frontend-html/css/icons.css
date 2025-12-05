@@ -1,0 +1,63 @@
+/* 自定义图标样式 - 使用Unicode字符 */
+
+.icon {
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+}
+
+/* 常用图标 */
+.icon-dashboard::before { content: "📊"; }
+.icon-briefcase::before { content: "💼"; }
+.icon-file::before { content: "📄"; }
+.icon-user::before { content: "👤"; }
+.icon-users::before { content: "👥"; }
+.icon-plus::before { content: "➕"; }
+.icon-edit::before { content: "✏️"; }
+.icon-delete::before { content: "🗑️"; }
+.icon-eye::before { content: "👁️"; }
+.icon-check::before { content: "✓"; }
+.icon-close::before { content: "✕"; }
+.icon-calendar::before { content: "📅"; }
+.icon-clock::before { content: "🕐"; }
+.icon-location::before { content: "📍"; }
+.icon-email::before { content: "✉️"; }
+.icon-phone::before { content: "📞"; }
+.icon-money::before { content: "💰"; }
+.icon-bell::before { content: "🔔"; }
+.icon-home::before { content: "🏠"; }
+.icon-search::before { content: "🔍"; }
+.icon-settings::before { content: "⚙️"; }
+.icon-logout::before { content: "🚪"; }
+.icon-building::before { content: "🏢"; }
+.icon-education::before { content: "🎓"; }
+.icon-tools::before { content: "🔧"; }
+.icon-star::before { content: "⭐"; }
+.icon-warning::before { content: "⚠️"; }
+.icon-info::before { content: "ℹ️"; }
+.icon-success::before { content: "✅"; }
+.icon-error::before { content: "❌"; }
+.icon-pause::before { content: "⏸️"; }
+.icon-play::before { content: "▶️"; }
+.icon-download::before { content: "⬇️"; }
+.icon-upload::before { content: "⬆️"; }
+.icon-link::before { content: "🔗"; }
+.icon-save::before { content: "💾"; }
+
+/* 图标大小 */
+.icon-sm { font-size: 0.875em; }
+.icon-lg { font-size: 1.25em; }
+.icon-xl { font-size: 1.5em; }
+.icon-2x { font-size: 2em; }
+.icon-3x { font-size: 3em; }
+.icon-4x { font-size: 4em; }
+
+/* 图标颜色 */
+.icon-primary { color: #3498db; }
+.icon-success { color: #4caf50; }
+.icon-warning { color: #ff9800; }
+.icon-danger { color: #f44336; }
+.icon-info { color: #2196f3; }
+.icon-muted { color: #95a5a6; }
